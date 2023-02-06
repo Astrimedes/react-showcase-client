@@ -3,10 +3,10 @@ console.log("using server endpoint " + serverEndpoint);
 
 class ChatRequest {
     message: string;
-    conversationId: number | undefined;
-    parentMessageId: number | undefined;
+    conversationId: string | undefined;
+    parentMessageId: string | undefined;
 
-    constructor(msg: string, convoId?: number, parentMsgId?: number)
+    constructor(msg: string, convoId?: string, parentMsgId?: string)
     {
         this.message = msg;
         this.conversationId = convoId;
@@ -14,7 +14,7 @@ class ChatRequest {
     }
 }
 
-const askChat = async (msg: string, conversationId?: number, parentId?: number) => {
+const askChat = async (msg: string, conversationId?: string, parentId?: string) => {
     console.log(`calling chat server @ ${serverEndpoint}`);
     const response = await fetch(serverEndpoint, {
         method: 'POST',

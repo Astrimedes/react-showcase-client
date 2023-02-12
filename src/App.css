@@ -14,3 +14,17 @@
 .App-link {
   color: #61dafb;
 }
+
+#mainApp {
+  padding-top: 50px;
+  padding-right: 30px;
+  padding-bottom: 50px;
+  padding-left: 80px;
+}
+
+.smallPadding {
+  padding-top: 8px;
+  padding-right: 4px;
+  padding-bottom: 8px;
+  padding-left: 4px;
+}

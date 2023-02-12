@@ -1,4 +1,12 @@
-# Getting Started with Create React App
+# Demonstrating React 18 features:
+Demonstrate new React 18 concurrency:
+- useTransition
+- useDeferredValue
+
+
+
+
+## Default Create-React-App readme
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

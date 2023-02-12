@@ -1,20 +1,21 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
-import { Col, Form, Row } from 'react-bootstrap';
-import { useState } from 'react';
+import { Card, Col, Form, Row } from 'react-bootstrap';
+import { useMemo, useRef, useState } from 'react';
 import { askChat } from './chaptGptLib';
+import MessageList from './conversations/components/MessageList';
+import Msg from './conversations/models/Msg';
 
 function App() {
   const [question, setQuestion] = useState('');
   const [isValidPrompt, setIsValidPrompt] = useState(false);
-  const [answer, setAnswer] = useState('Waiting for your question...');
-  const [isEditable, setIsEditable] = useState(true);  
+  const [isEditable, setIsEditable] = useState(true);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const [transcript, setTranscript] = useState("");
+  const [messagesList, setMessagesList] = useState(new Array<Msg>());
 
   const [convoId, setConvoId] = useState("");
-  const [parentId, setParentId] = useState("");
 
   const handleQuestionChange = (event: { target: { value: any; }; }) => {
     const textValue = event.target.value;
@@ -26,11 +27,9 @@ function App() {
   };
 
   const handleConversationChange = (event: any) => {
-      setConvoId(event.target.value);
-  }
-
-  const handleParentChange = (event: any) => {
-      setParentId(event.target.value);
+    // clear out messages
+    setMessagesList(new Array<Msg>());
+    setConvoId(event.target.value);
   }
 
   const askChatNow = () => {
@@ -41,72 +40,59 @@ function App() {
     setIsEditable(false);
     console.log("asking chatGpt: " + question);
 
-    askChat(question, convoId, parentId)
-    .then((r) => {
+    // create user prompt message...
+    const userMsg = new Msg({role: "User", message: question, conversationId: convoId, time: Date.now()});
 
-        setAnswer(r.response);
-        setTranscript(question + "\n\n" + r.response + "\n\n\n" + transcript);
+    askChat(question, convoId)
+    .then((r) => {
+        // add user and reply messages
+        setMessagesList([...messagesList, userMsg, r])
         setConvoId(r.conversationId);
-        setParentId(r.messageId);
       })
-    .catch(er => setAnswer(`Error occurred: ${er?.toString()}`))
-    .finally( 
-      () => setIsEditable(true));
+    .catch(er => setMessagesList([...messagesList, userMsg, new Msg({role: "System: Error", message: `Error Occurred: ${er.toString()}`, time: Date.now()})]))
+    .finally(() => {
+      setIsEditable(true);
+      // clear question input
+      if (inputRef.current != null) inputRef.current.value = "";
+    });
   }
 
   return (
     <div className="App">
       <header className="App-header">
         <p>
-          React Application Demo
+          Demo Chat - Rendering
         </p>
       </header>
       <div id="mainApp">
         <Form>
-          <Form.Group as={Row}>
-            <Col sm="12">
-              <Form.Control plaintext id="explanation" readOnly defaultValue="Enter some text for chatGpt to respond to" />
-            </Col>
-          </Form.Group>
+
+          <Row className="mb-3">
+            <Form.Group as={Row} className="mb-2">
+              <Form.Label column sm="1">Conversation</Form.Label>
+              <Col sm="4">
+                <fieldset disabled={true}>
+                  <Form.Control id="conversationId" onChange={handleConversationChange} value={convoId} />
+                </fieldset>
+              </Col>
+            </Form.Group>
+
+            <Form.Group as={Row} className="mb-2">
+              <Form.Label column sm="1">
+                Prompt
+              </Form.Label>
+              <Col sm="10">
+                <fieldset disabled={!isEditable}>
+                  <Form.Control ref={inputRef} id="chatInput" onChange={handleQuestionChange} placeholder="" />
+                  <div className="smallPadding"><Button type="button" id="sendButton" onClick={() => askChatNow()}>Ask!</Button></div> 
+                </fieldset>
+              </Col>
+            </Form.Group>
+          </Row>
+          
 
           <Form.Group as={Row} className="mb-3">
-            <Form.Label column sm="2">
-              Conversation ID
-            </Form.Label>
-            <Col sm="4">
-              <fieldset disabled={true}>
-                <Form.Control id="conversationId" onChange={handleConversationChange} value={convoId} />
-              </fieldset>
-            </Col>
-            <Form.Label column sm="1">
-              Parent ID
-            </Form.Label>
-            <Col sm="4">
-              <fieldset disabled={true}>
-                <Form.Control id="parentId" onChange={handleParentChange} value={parentId} />
-              </fieldset>
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row} className="mb-3">
-            <Form.Label column sm="1">
-              Prompt
-            </Form.Label>
-            <Col sm="10">
-              <fieldset disabled={!isEditable}>
-                <Form.Control  id="chatInput" onChange={handleQuestionChange} placeholder="How are you today, GPT-3?" />
-                <Button type="button" id="sendButton" onClick={() => askChatNow()}>Ask!</Button>
-              </fieldset>
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row} className="mb-3">
-            <Form.Label column sm="1">
-              Answer
-            </Form.Label>
-            <Col sm="10">
-              <Form.Label id="ai-response-text" readOnly><pre>{transcript}</pre></Form.Label>
-            </Col>
+            <MessageList messages={messagesList} />
           </Form.Group>
         </Form>
       </div>

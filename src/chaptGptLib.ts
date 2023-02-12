@@ -1,3 +1,5 @@
+import Msg from "./conversations/models/Msg";
+
 const serverEndpoint = process.env.REACT_APP_CHAT_SERVER_PROTOCOL + "://" + process.env.REACT_APP_CHAT_SERVER_HOST + ":" + process.env.REACT_APP_CHAT_SERVER_PORT + "/conversation";
 console.log("using server endpoint " + serverEndpoint);
 
@@ -24,7 +26,9 @@ const askChat = async (msg: string, conversationId?: string, parentId?: string) 
         },
         body: JSON.stringify(new ChatRequest(msg, conversationId, parentId)),
         });
-    return await response.json();
+
+    const messageAnswer = await response.json() as Msg;
+    return messageAnswer;
 }
 
 export { askChat }

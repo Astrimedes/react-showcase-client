@@ -1,4 +1,3 @@
-import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Msg from '../models/Msg';
 
@@ -10,7 +9,7 @@ function Message(props: {msg: Msg, opacity: number})
         <Card.Body>
           <Card.Title><div>{msg.role} says...</div></Card.Title>
           <Card.Text>
-            <p>{msg.message}</p>
+            {msg.message}
           </Card.Text>
         </Card.Body>
       </Card>

@@ -1,7 +1,10 @@
+import ChatServerResponse from "./conversations/models/ChatServerResponse";
 import Msg from "./conversations/models/Msg";
 
-const serverEndpoint = process.env.REACT_APP_CHAT_SERVER_PROTOCOL + "://" + process.env.REACT_APP_CHAT_SERVER_HOST + ":" + process.env.REACT_APP_CHAT_SERVER_PORT + "/conversation";
-console.log("using server endpoint " + serverEndpoint);
+const HOST_ENDPOINT = process.env.REACT_APP_CHAT_SERVER_PROTOCOL + "://" + process.env.REACT_APP_CHAT_SERVER_HOST + ":" + process.env.REACT_APP_CHAT_SERVER_PORT;
+const POST_ASK_ENDPOINT = HOST_ENDPOINT + "/message";
+const GET_CONVO_ENDPOINT = HOST_ENDPOINT + "/conversation/";
+console.log("using server endpoint " + HOST_ENDPOINT);
 
 class ChatRequest {
     message: string;
@@ -17,18 +20,32 @@ class ChatRequest {
 }
 
 const askChat = async (msg: string, conversationId?: string, parentId?: string) => {
-    console.log(`calling chat server @ ${serverEndpoint}`);
-    const response = await fetch(serverEndpoint, {
+    console.log(`calling chat server @ ${POST_ASK_ENDPOINT}`);
+    const response = await fetch(POST_ASK_ENDPOINT, {
         method: 'POST',
         headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify(new ChatRequest(msg, conversationId, parentId)),
-        });
+    });
 
-    const messageAnswer = await response.json() as Msg;
+    const messageAnswer = await response.json() as ChatServerResponse;
     return messageAnswer;
 }
 
-export { askChat }
+const getConvoMessages = async (conversationId: string) => {
+    const convoEndpoint = GET_CONVO_ENDPOINT + conversationId;
+    console.log(`calling chat server @ ${convoEndpoint}`);
+    const response = await fetch(convoEndpoint, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json'
+        },
+    });
+
+    const messageAnswer = await response.json() as Msg[];
+    return messageAnswer;
+}
+
+export { askChat, getConvoMessages }

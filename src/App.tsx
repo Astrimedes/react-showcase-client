@@ -1,9 +1,10 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
-import { Card, Col, Form, Row } from 'react-bootstrap';
-import { useMemo, useRef, useState } from 'react';
-import { askChat } from './chaptGptLib';
+import { Col, Form, Row } from 'react-bootstrap';
+import { ArrowRepeat, Clipboard, Send } from 'react-bootstrap-icons';
+import { SetStateAction, useRef, useState } from 'react';
+import { askChat, getConvoMessages } from './chaptGptLib';
 import MessageList from './conversations/components/MessageList';
 import Msg from './conversations/models/Msg';
 
@@ -26,10 +27,25 @@ function App() {
     }
   };
 
-  const handleConversationChange = (event: any) => {
+  const handleConversationChange = (event: { target: { value: SetStateAction<string>; }; }) => {
     // clear out messages
     setMessagesList(new Array<Msg>());
     setConvoId(event.target.value);
+  }
+
+  const getAllConvoMessages = () => {
+    setIsEditable(false);
+
+    getConvoMessages(convoId)
+    .then((msgs) => {
+      console.log(msgs);
+      // add user and reply messages
+      setMessagesList(msgs);
+    })
+    .catch(er => console.log(er))
+    .finally(() => {
+      setIsEditable(true);
+    });
   }
 
   const askChatNow = () => {
@@ -41,13 +57,16 @@ function App() {
     console.log("asking chatGpt: " + question);
 
     // create user prompt message...
-    const userMsg = new Msg({role: "User", message: question, conversationId: convoId, time: Date.now()});
+    let userMsg = new Msg({role: "User", message: question, conversationId: convoId, time: Date.now()});
+    let replyMsg = null;
 
     askChat(question, convoId)
     .then((r) => {
         // add user and reply messages
-        setMessagesList([...messagesList, userMsg, r])
-        setConvoId(r.conversationId);
+        userMsg = r.prompt;
+        replyMsg = r.reply;
+        setMessagesList([...messagesList, userMsg, replyMsg])
+        setConvoId(replyMsg.conversationId);
       })
     .catch(er => setMessagesList([...messagesList, userMsg, new Msg({role: "System: Error", message: `Error Occurred: ${er.toString()}`, time: Date.now()})]))
     .finally(() => {
@@ -71,9 +90,12 @@ function App() {
             <Form.Group as={Row} className="mb-2">
               <Form.Label column sm="1">Conversation</Form.Label>
               <Col sm="4">
-                <fieldset disabled={true}>
+                <fieldset disabled={!isEditable}>
                   <Form.Control id="conversationId" onChange={handleConversationChange} value={convoId} />
                 </fieldset>
+              </Col>
+              <Col sm="4">
+                <Button type="button" id="syncButton" onClick={() => getAllConvoMessages()}><ArrowRepeat/> Sync</Button>
               </Col>
             </Form.Group>
 
@@ -84,7 +106,7 @@ function App() {
               <Col sm="10">
                 <fieldset disabled={!isEditable}>
                   <Form.Control ref={inputRef} id="chatInput" onChange={handleQuestionChange} placeholder="" />
-                  <div className="smallPadding"><Button type="button" id="sendButton" onClick={() => askChatNow()}>Ask!</Button></div> 
+                  <div className="smallPadding"><Button type="button" id="sendButton" onClick={() => askChatNow()}><Send /> Send</Button></div> 
                 </fieldset>
               </Col>
             </Form.Group>

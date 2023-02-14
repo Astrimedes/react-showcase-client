@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
 import { Col, Form, Row } from 'react-bootstrap';
 import { ArrowRepeat, Clipboard, Send } from 'react-bootstrap-icons';
-import { SetStateAction, useRef, useState } from 'react';
+import { SetStateAction, useDeferredValue, useRef, useState } from 'react';
 import { askChat, getConvoMessages } from './chaptGptLib';
 import MessageList from './conversations/components/MessageList';
 import Msg from './conversations/models/Msg';
@@ -12,11 +12,14 @@ function App() {
   const [question, setQuestion] = useState('');
   const [isValidPrompt, setIsValidPrompt] = useState(false);
   const [isEditable, setIsEditable] = useState(true);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const questionInput = useRef<HTMLInputElement>(null);
+  const convoInput = useRef<HTMLInputElement>(null);
 
   const [messagesList, setMessagesList] = useState(new Array<Msg>());
+  const defaultMsgList = useDeferredValue(messagesList);
 
   const [convoId, setConvoId] = useState("");
+  const [nextConvoId, setNextConvoId] = useState("");
 
   const handleQuestionChange = (event: { target: { value: any; }; }) => {
     const textValue = event.target.value;
@@ -27,20 +30,20 @@ function App() {
     }
   };
 
-  const handleConversationChange = (event: { target: { value: SetStateAction<string>; }; }) => {
-    // clear out messages
-    setMessagesList(new Array<Msg>());
-    setConvoId(event.target.value);
+  const handleNextConvoChange = (event: { target: { value: SetStateAction<string>; }; }) => {
+    setNextConvoId(event.target.value);
   }
 
   const getAllConvoMessages = () => {
     setIsEditable(false);
-
-    getConvoMessages(convoId)
+    getConvoMessages(nextConvoId)
     .then((msgs) => {
       console.log(msgs);
-      // add user and reply messages
-      setMessagesList(msgs);
+      if (msgs?.length > 0)
+      {
+        setMessagesList(msgs);
+        setConvoId(msgs[0].conversationId);
+      }
     })
     .catch(er => console.log(er))
     .finally(() => {
@@ -67,12 +70,13 @@ function App() {
         replyMsg = r.reply;
         setMessagesList([...messagesList, userMsg, replyMsg])
         setConvoId(replyMsg.conversationId);
+        if (convoInput.current != null) convoInput.current.value = replyMsg.conversationId;
       })
     .catch(er => setMessagesList([...messagesList, userMsg, new Msg({role: "System: Error", message: `Error Occurred: ${er.toString()}`, time: Date.now()})]))
     .finally(() => {
       setIsEditable(true);
       // clear question input
-      if (inputRef.current != null) inputRef.current.value = "";
+      if (questionInput.current != null) questionInput.current.value = "";
     });
   }
 
@@ -91,11 +95,11 @@ function App() {
               <Form.Label column sm="1">Conversation</Form.Label>
               <Col sm="4">
                 <fieldset disabled={!isEditable}>
-                  <Form.Control id="conversationId" onChange={handleConversationChange} value={convoId} />
+                  <Form.Control id="conversationId" ref={convoInput}  onChange={handleNextConvoChange} defaultValue={nextConvoId} />
                 </fieldset>
               </Col>
               <Col sm="4">
-                <Button type="button" id="syncButton" onClick={() => getAllConvoMessages()}><ArrowRepeat/> Sync</Button>
+                <Button disabled={!isEditable} type="button" id="syncButton" onClick={getAllConvoMessages}><ArrowRepeat/> Sync</Button>
               </Col>
             </Form.Group>
 
@@ -105,7 +109,7 @@ function App() {
               </Form.Label>
               <Col sm="10">
                 <fieldset disabled={!isEditable}>
-                  <Form.Control ref={inputRef} id="chatInput" onChange={handleQuestionChange} placeholder="" />
+                  <Form.Control ref={questionInput} id="chatInput" onChange={handleQuestionChange} placeholder="" />
                   <div className="smallPadding"><Button type="button" id="sendButton" onClick={() => askChatNow()}><Send /> Send</Button></div> 
                 </fieldset>
               </Col>
@@ -114,7 +118,7 @@ function App() {
           
 
           <Form.Group as={Row} className="mb-3">
-            <MessageList messages={messagesList} />
+            <MessageList messages={defaultMsgList} />
           </Form.Group>
         </Form>
       </div>

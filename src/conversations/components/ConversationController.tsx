@@ -42,7 +42,7 @@ export function ConversationController(props: {editable: boolean, setConvoId: (n
       <Form.Label column sm="1">Conversation</Form.Label>
       <Col sm="4">
         <fieldset disabled={true}>
-          <Form.Control id="convoIdDisplay" defaultValue={convoId} />
+          <Form.Control disabled={true} id="convoIdDisplay" defaultValue={convoId} />
         </fieldset>
       </Col>
       <Col sm="4">

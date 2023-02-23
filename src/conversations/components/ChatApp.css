@@ -28,3 +28,7 @@
   padding-bottom: 8px;
   padding-left: 4px;
 }
+
+.smallText {
+  font-size: smaller;
+}

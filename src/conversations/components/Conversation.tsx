@@ -8,17 +8,18 @@ function Conversation(props: {convoId: string, messages: Msg[], opacity: number}
     const {messages, convoId, opacity} = props;
 
     const sortedMessages = sortMessages(messages, false);
-    const bodyText = sortedMessages.slice(0, 4).map(msg => `${msg.role} said: \n${msg.message}`).join("\n");
+    const messageParts = sortedMessages.slice(0, 4).map(msg => {
+    return (
+      <Card.Text key={msg.id} className='smallText'>
+        {msg.role} said:<br/>{msg.message}
+      </Card.Text>
+    )});
     
     return (
       <Card style={{opacity: opacity}}>
         <Card.Body>
           <Card.Title><div>{`${convoId} : ${sortedMessages[0].message.slice(0, 120)}`}</div></Card.Title>
-          <Card.Text className='smallText'>
-            <pre>
-              {bodyText}
-            </pre>
-          </Card.Text>
+          {messageParts}
         </Card.Body>
       </Card>
     );

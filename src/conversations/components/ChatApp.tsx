@@ -7,11 +7,14 @@ import Msg from '../models/Msg';
 import MessageSender from './MessageSender';
 import { ConversationController } from './ConversationController';
 import ConversationSearch from './ConversationSearch';
+import Convo from '../models/Convo';
 
 function ChatApp() {
   const [convoId, setConvoId] = useState("");
   const [messagesList, setMessagesList] = useState(new Array<Msg>());
   const [isEditable, setIsEditable] = useState(true);
+  const [activeTabKey, setActiveTabKey] = useState('talk');
+  
 
   return (
     <div className="App">
@@ -21,7 +24,7 @@ function ChatApp() {
         </p>
       </header>
       <div id="mainApp">
-        <Tabs defaultActiveKey="talk" id="tabs-container" className="mb-3">
+        <Tabs mountOnEnter={true} activeKey={activeTabKey} id="tabs-container" className="mb-3" onSelect={(k) => setActiveTabKey(k ?? 'talk')}>
           <Tab eventKey="talk" title="Talk">
             <Form>
               <Row className="mb-3">
@@ -34,7 +37,7 @@ function ChatApp() {
             </Form>
           </Tab>
           <Tab eventKey="search" title="Search">
-            <ConversationSearch setConvoId={setConvoId} defaultMessages={[messagesList]} />
+            <ConversationSearch setConvoId={setConvoId} defaultMessages={[new Convo(convoId, messagesList)]} />
           </Tab>
         </Tabs>
       </div>

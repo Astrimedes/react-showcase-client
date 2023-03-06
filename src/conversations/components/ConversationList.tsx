@@ -2,10 +2,11 @@ import Message from "./Message";
 import sortMessages from "../models/ConversationSorting";
 import { Col, Row } from "react-bootstrap";
 import Msg from '../models/Msg';
-import { useDeferredValue } from "react";
+import { Fragment, useDeferredValue } from "react";
 import Conversation from "./Conversation";
+import Convo from "../models/Convo";
 
-function ConversationList(props: {conversations: Msg[][]})
+function ConversationList(props: {conversations: Convo[]})
 { 
     const {conversations} = props;
     const deferredConvos = useDeferredValue(conversations);
@@ -13,7 +14,7 @@ function ConversationList(props: {conversations: Msg[][]})
         <Row>
             {
                 conversations.map((convo, index, array) => {
-                    return convo.length > 1 ? (<Conversation key={index} convoId={convo[1].conversationId ?? 'n/a'} messages={convo} opacity={1}></Conversation>) : (<></>)
+                    return convo?.messages?.length > 1 ? (<Conversation key={index} convoId={convo?.id ?? 'n/a'} messages={convo.messages} opacity={1}></Conversation>) : (<Fragment key="empty"></Fragment>)
                 })
             }
         </Row>

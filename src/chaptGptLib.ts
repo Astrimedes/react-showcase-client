@@ -1,4 +1,5 @@
 import ChatServerResponse from "./conversations/models/ChatServerResponse";
+import Convo from "./conversations/models/Convo";
 import Msg from "./conversations/models/Msg";
 
 const HOST_ENDPOINT = process.env.REACT_APP_CHAT_SERVER_PROTOCOL + "://" + process.env.REACT_APP_CHAT_SERVER_HOST + ":" + process.env.REACT_APP_CHAT_SERVER_PORT;
@@ -44,8 +45,8 @@ const getConvoMessages = async (conversationId: string) => {
         },
     });
 
-    const messageAnswer = await response.json() as Msg[];
-    return messageAnswer;
+    const convo = await response.json() as Convo;
+    return convo?.messages;
 }
 
 export { askChat, getConvoMessages }

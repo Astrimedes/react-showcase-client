@@ -5,6 +5,7 @@ import Msg from "./conversations/models/Msg";
 const HOST_ENDPOINT = process.env.REACT_APP_CHAT_SERVER_PROTOCOL + "://" + process.env.REACT_APP_CHAT_SERVER_HOST + ":" + process.env.REACT_APP_CHAT_SERVER_PORT;
 const POST_ASK_ENDPOINT = HOST_ENDPOINT + "/message";
 const GET_CONVO_ENDPOINT = HOST_ENDPOINT + "/conversation/";
+const GET_ALLCONVOS_ENDPOINT = HOST_ENDPOINT + "/conversations";
 console.log("using server endpoint " + HOST_ENDPOINT);
 
 class ChatRequest {
@@ -49,4 +50,24 @@ const getConvoMessages = async (conversationId: string) => {
     return convo?.messages;
 }
 
-export { askChat, getConvoMessages }
+const getAllConversations = async () => {
+    try {
+        console.log(`calling chat server @ ${GET_ALLCONVOS_ENDPOINT}`);
+        const response = await fetch(GET_ALLCONVOS_ENDPOINT, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            },
+        });
+
+        console.log(response);
+
+        const allConvos = await response.json() as Convo[];
+        return allConvos;
+    } catch(e) {
+        console.log(e);
+        return new Array<Convo>();
+    }
+}
+
+export { askChat, getConvoMessages, getAllConversations }

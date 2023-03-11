@@ -37,7 +37,7 @@ function ChatApp() {
             </Form>
           </Tab>
           <Tab eventKey="search" title="Search">
-            <ConversationSearch setConvoId={setConvoId} defaultMessages={[new Convo(convoId, messagesList)]} />
+            <ConversationSearch setConvoId={setConvoId}/>
           </Tab>
         </Tabs>
       </div>

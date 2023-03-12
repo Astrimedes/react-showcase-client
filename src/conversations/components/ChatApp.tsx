@@ -1,19 +1,37 @@
 import './ChatApp.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form, Row, Tab, Tabs } from 'react-bootstrap';
-import { useDeferredValue, useState } from 'react';
+import { startTransition, useDeferredValue, useEffect, useState } from 'react';
 import MessageList from './MessageList';
 import Msg from '../models/Msg';
 import MessageSender from './MessageSender';
 import { ConversationController } from './ConversationController';
 import ConversationSearch from './ConversationSearch';
 import Convo from '../models/Convo';
+import { getAllConversations } from '../../chaptGptLib';
 
 function ChatApp() {
   const [convoId, setConvoId] = useState("");
   const [messagesList, setMessagesList] = useState(new Array<Msg>());
   const [isEditable, setIsEditable] = useState(true);
   const [activeTabKey, setActiveTabKey] = useState('talk');
+  const [allConvos, setAllConvos] = useState<Convo[] | undefined>(undefined);
+
+   // fetch all conversations one time on loading for now...
+   useEffect(() => {
+    getAllConversations()
+        .then(convos => {
+          startTransition(() => {
+            setAllConvos(convos);
+          });
+        });
+  }, [messagesList]);
+
+  function handleTabChange(key: string | null) {
+    startTransition(() => {
+      setActiveTabKey(key ?? 'talk');
+    });
+  }
   
 
   return (
@@ -24,7 +42,7 @@ function ChatApp() {
         </p>
       </header>
       <div id="mainApp">
-        <Tabs mountOnEnter={true} activeKey={activeTabKey} id="tabs-container" className="mb-3" onSelect={(k) => setActiveTabKey(k ?? 'talk')}>
+        <Tabs mountOnEnter={true} activeKey={activeTabKey} id="tabs-container" className="mb-3" onSelect={handleTabChange}>
           <Tab eventKey="talk" title="Talk">
             <Form>
               <Row className="mb-3">
@@ -37,7 +55,7 @@ function ChatApp() {
             </Form>
           </Tab>
           <Tab eventKey="search" title="Search">
-            <ConversationSearch setConvoId={setConvoId}/>
+            <ConversationSearch allConvos={allConvos}/>
           </Tab>
         </Tabs>
       </div>

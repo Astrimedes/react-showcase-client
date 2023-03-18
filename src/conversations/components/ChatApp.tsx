@@ -15,24 +15,10 @@ function ChatApp() {
   const [messagesList, setMessagesList] = useState(new Array<Msg>());
   const [isEditable, setIsEditable] = useState(true);
   const [activeTabKey, setActiveTabKey] = useState('talk');
-  const [allConvos, setAllConvos] = useState<Convo[] | undefined>(undefined);
-
-   // fetch all conversations one time on loading for now...
-   useEffect(() => {
-    getAllConversations()
-        .then(convos => {
-          startTransition(() => {
-            setAllConvos(convos);
-          });
-        });
-  }, [messagesList]);
 
   function handleTabChange(key: string | null) {
-    startTransition(() => {
-      setActiveTabKey(key ?? 'talk');
-    });
-  }
-  
+    setActiveTabKey(key ?? 'talk');
+  }  
 
   return (
     <div className="App">
@@ -55,7 +41,7 @@ function ChatApp() {
             </Form>
           </Tab>
           <Tab eventKey="search" title="Search">
-            <ConversationSearch allConvos={allConvos}/>
+            <ConversationSearch />
           </Tab>
         </Tabs>
       </div>

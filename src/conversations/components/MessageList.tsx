@@ -1,5 +1,5 @@
 import Message from "./Message";
-import sortMessages from "../models/ConversationSorting";
+import { sortMessages } from "../models/SortAndFindUtils";
 import { Col, Row } from "react-bootstrap";
 import Msg from '../models/Msg';
 import { useDeferredValue } from "react";

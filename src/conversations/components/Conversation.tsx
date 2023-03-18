@@ -1,6 +1,6 @@
 import { Form } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
-import sortMessages from '../models/ConversationSorting';
+import { sortMessages } from '../models/SortAndFindUtils';
 import Msg from '../models/Msg';
 
 function Conversation(props: {convoId: string, messages: Msg[], opacity: number})

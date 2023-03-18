@@ -1,56 +1,39 @@
 import './ChatApp.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Col, Form, Row, Tab, Tabs } from 'react-bootstrap';
-import { useDeferredValue, useEffect, useMemo, useRef, useState, useTransition } from 'react';
-import MessageList from './MessageList';
-import Msg from '../models/Msg';
-import MessageSender from './MessageSender';
-import { ConversationController } from './ConversationController';
-import ConversationList from './ConversationList';
+import { Col, Form, Row } from 'react-bootstrap';
+import { useDeferredValue, useEffect, useState } from 'react';
 import Convo from '../models/Convo';
+import ConversationQueryResults from './ConversationQueryResults';
 import { getAllConversations } from '../../chaptGptLib';
 
-function ConversationSearch(props: {allConvos: Convo[] | undefined}) {
-    const [isPending, startTransition] = useTransition();
-    const searchInput = useRef<HTMLInputElement>(null);
+function ConversationSearch(props: {}) {
     const [searchTerms, setSearchTerms] = useState("");
+    const [allConvos, setAllConvos] = useState<Convo[] | undefined>(undefined);
 
-    const {allConvos} = props;
-
-    const handleQuestionChange = (event: { target: { value: any; }; }) => {
-        const textValue = event.target.value;
-        // use transition here, when setting a new search term
-        startTransition(() => {
-            setSearchTerms(textValue);
+    // fetch all conversations one time on loading for now...
+   useEffect(() => {
+    getAllConversations()
+        .then(convos => {
+            setAllConvos(convos);
         });
-    };
-
-    const searchResults = useMemo(() => {
-        if (!allConvos || allConvos.length < 1) return;
-        const matches = allConvos.filter(convo => convo.messages.find(msg => msg.message.includes(searchTerms)));
-        return matches;
-    }, [allConvos, searchTerms]);
+    }, []);
 
     return (
         <>
             <Form>
-                <Form.Group as={Row} className="mb-3">
+                <Row className="mb-3">
                     <Col sm="2">
                         <Form.Label >Message Search Terms</Form.Label>
                     </Col>
                     <Col sm="4">
-                        <Form.Control ref={searchInput} onChange={handleQuestionChange} ></Form.Control>
+                        <Form.Control type="text" value={searchTerms} onChange={(e) => setSearchTerms(e.target.value)}></Form.Control>
                     </Col>
-                </Form.Group>
-                <Form.Group as={Row} className="mb-3">
-                    
-                        <Col sm="12">
-                        { searchResults && searchResults.length > 0 ? 
-                                <ConversationList conversations={searchResults} />
-                            : <Form.Label >No results found</Form.Label>
-                        }
-                        </Col>                
-                </Form.Group>
+                </Row>
+                <Row className="mb-3">
+                    <Col sm="12">
+                        <ConversationQueryResults query={searchTerms} allConvos={allConvos} />
+                    </Col>                
+                </Row>
             </Form>
         </>
     );

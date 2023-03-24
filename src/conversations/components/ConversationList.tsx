@@ -1,4 +1,4 @@
-import { Row } from "react-bootstrap";
+import { Accordion, Row } from "react-bootstrap";
 import { Fragment } from "react";
 import Conversation from "./Conversation";
 import Convo from "../models/Convo";
@@ -16,7 +16,9 @@ const ConversationList = (props: {conversations: Convo[] | undefined}) =>
     const {conversations} = props;
     return (
         <Row>
-            { createConvoElements(conversations) }
+            <Accordion>
+                {createConvoElements(conversations)}
+            </Accordion>
         </Row>
     )
 };

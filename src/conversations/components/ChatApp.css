@@ -1,9 +1,9 @@
-.App-header {
-  text-align: center;
-  background-color: #282c34;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.stretch-no-scroll {
+  width: 100vw;
+}
+
+.hide-x-scroll {
+  overflow-x: hidden;
 }
 
 #explanation {
@@ -20,6 +20,7 @@
   padding-right: 30px;
   padding-bottom: 50px;
   padding-left: 80px;
+  overflow-x: hidden;
 }
 
 .smallPadding {

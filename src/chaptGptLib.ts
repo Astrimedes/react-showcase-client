@@ -65,7 +65,8 @@ const getAllConversations = async () => {
         return allConvos;
     } catch(e) {
         console.log(e);
-        return new Array<Convo>();
+        let errResult = (e as Error).message || (e as string) || "error";
+        return errResult;
     }
 }
 

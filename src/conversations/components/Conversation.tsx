@@ -1,4 +1,4 @@
-import { Form } from 'react-bootstrap';
+import { Accordion, Form, Stack } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import { sortMessages } from '../models/SortAndFindUtils';
 import Msg from '../models/Msg';
@@ -8,20 +8,24 @@ function Conversation(props: {convoId: string, messages: Msg[], opacity: number}
     const {messages, convoId, opacity} = props;
 
     const sortedMessages = sortMessages(messages, false);
-    const messageParts = sortedMessages.slice(0, 4).map(msg => {
+    const bodyElements = sortedMessages.map(msg => {
     return (
-      <Card.Text key={msg.id} className='smallText'>
+      <p style={{opacity: opacity}} key={msg.id} className='smallText'>
         {msg.role} said:<br/>{msg.message}
-      </Card.Text>
+      </p>
     )});
+    const title = `${convoId} : ${sortedMessages[0].message.slice(0, 120)}`;
     
     return (
-      <Card style={{opacity: opacity}}>
-        <Card.Body>
-          <Card.Title><div>{`${convoId} : ${sortedMessages[0].message.slice(0, 120)}`}</div></Card.Title>
-          {messageParts}
-        </Card.Body>
-      </Card>
+      <Accordion.Item eventKey={convoId} style={{opacity: opacity}}>
+        <Accordion.Header>
+          <Stack direction='vertical'>
+            <div><h5 className='text-primary'>{sortedMessages[0].message.slice(0, 120)}</h5></div>
+            <div><h6 className='text-secondary'>ID: {convoId}</h6></div>
+          </Stack>
+        </Accordion.Header>
+        <Accordion.Body>{bodyElements}</Accordion.Body>
+      </Accordion.Item>
     );
 }
 

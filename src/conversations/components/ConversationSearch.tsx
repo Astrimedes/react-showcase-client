@@ -1,7 +1,7 @@
 import './ChatApp.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Col, Form, Row } from 'react-bootstrap';
-import { useEffect, useMemo, useState, useTransition } from 'react';
+import { Col, Form, Row, Stack } from 'react-bootstrap';
+import { useDeferredValue, useEffect, useMemo, useState, useTransition } from 'react';
 import Convo from '../models/Convo';
 import ConversationQueryResults from './ConversationQueryResults';
 import { getAllConversations } from '../../chaptGptLib';
@@ -28,66 +28,61 @@ const resolveMessagesAgainstConvos = (currentAllConvos: Convo[] | undefined, cur
     return nextConvos;
 };
 
-function ConversationSearch(props: {reload: boolean, messageList: Msg[] | undefined}) {
-    const {messageList, reload: reloadProp} = props;
-    const [shouldReload, setShouldReload] = useState(reloadProp);
+function ConversationSearch(props: {partialConvo: Msg[] | undefined}) {
+    const {partialConvo: messageList} = props;
+    const [shouldReload, setShouldReload] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingError, setIsLoadingError] = useState(false);
     const [searchTerms, setSearchTerms] = useState("");
     const [allConvos, setAllConvos] = useState<Convo[] | undefined>(undefined);
-    // const [isPending, startTransition] = useTransition();
 
-    console.log(`isLoading: ${isLoading}, shouldReload: ${shouldReload}`);
-
-    if (shouldReload) {
-        console.log(`preparing the call to get convos...`);
-        setIsLoading(true);
-        setShouldReload(false);
-        delay(1000)
-            .then(getAllConversations)
-            .then(convoResponse => {
-                if (!(convoResponse instanceof Array<Convo>)) {
-                    // error
-                    setIsLoadingError(true);
-                    throw new Error("loading error");
-                } else {
+    useEffect(() => {
+        if (shouldReload && !isLoading) {
+            console.log(`preparing the call to get convos...`);
+            setIsLoading(true);
+            setShouldReload(false);
+            delay(3000)
+                .then(getAllConversations)
+                .then(convoResponse => {
+                    if (!(convoResponse instanceof Array<Convo>)) {
+                        throw new Error("loading error");
+                    }
                     return convoResponse as Array<Convo>;
-                }
-            })
-            .then(convos => {
-                setAllConvos(resolveMessagesAgainstConvos(convos, messageList));
-            }).catch(e => {
-                setIsLoadingError(true);
-            }).finally(() => {
-                setIsLoading(false);
-            })
-    };
-
-    useMemo(() => {
-        let result = resolveMessagesAgainstConvos(allConvos, messageList)
-        if (result instanceof Error) {
-            setIsLoadingError(true);
-        } else {
-            setAllConvos(result as Convo[])
+                })
+                .then(convos => {
+                    setAllConvos(resolveMessagesAgainstConvos(convos, messageList));
+                }).catch(e => {
+                    console.debug(e);
+                    setIsLoadingError(true);
+                }).finally(() => {
+                    setIsLoading(false);
+                })
         }
-    }, [messageList, reloadProp]);
+    }, [shouldReload])
+
+    useEffect(() => {
+        setAllConvos(resolveMessagesAgainstConvos(allConvos, messageList));
+    }, [messageList])
 
     return (
         <>
             <Form>
-                <Row className="mb-3">
-                    <Col sm="2">
-                        <Form.Label >Message Search Terms</Form.Label>
-                    </Col>
-                    <Col sm="4">
-                        <Form.Control type="text" value={searchTerms} onChange={(e) => setSearchTerms(e.target.value)}></Form.Control>
+                <Row className="mb-3 inset-children">
+                    <Col sm="12">
+                        <Row className="mb-3">
+                            <Stack direction="vertical" gap={1}>
+                                <Form.Label>Message Search Terms</Form.Label>
+                                <Form.Control as="textarea" rows={2} value={searchTerms} onChange={(e) => setSearchTerms(e.target.value)}></Form.Control>
+                            </Stack>
+                        </Row>
                     </Col>
                 </Row>
+                
                 <Row className="mb-3">
                     <Col sm="12">
                         { 
-                            isLoading ? <>Loading...</>
-                            : isLoadingError ? <>ERROR LOADING CONVERSATIONS</>
+                            isLoading ? <h3 className="text-secondary">Loading...</h3>
+                            : isLoadingError ? <h3 className="text-danger">Error Loading Conversations</h3>
                             : <ConversationQueryResults query={searchTerms} allConvos={allConvos} />
                         }
                     </Col>                

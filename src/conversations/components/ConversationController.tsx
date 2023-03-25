@@ -39,15 +39,7 @@ export function ConversationController(props: {editable: boolean, setConvoId: (n
   return (
   <>
     <Form.Group as={Row} className="mb-2">
-      <Form.Label column sm="1">Conversation</Form.Label>
-      <Col sm="4">
-        <fieldset disabled={true}>
-          <Form.Control disabled={true} id="convoIdDisplay" defaultValue={convoId} />
-        </fieldset>
-      </Col>
-      <Col sm="4">
-        <Button disabled={!isEditable} type="button" id="syncButton" onClick={() => getAllConvoMessages(convoId)}><ArrowRepeat /> Sync</Button>
-      </Col>
+      <Form.Label  column sm="12" style={{paddingLeft: "1rem"}} className="text-secondary"><strong>Conversation ID:</strong> {convoId}</Form.Label>
     </Form.Group>
   </>
   );

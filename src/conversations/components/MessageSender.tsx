@@ -1,21 +1,22 @@
 import Button from 'react-bootstrap/Button';
-import { Col, Form, Row } from 'react-bootstrap';
+import { Col, Form, Row, Stack } from 'react-bootstrap';
 import { Send } from 'react-bootstrap-icons';
 import { RefObject, SetStateAction, useRef, useState } from 'react';
 import { askChat } from '../../chaptGptLib';
 import Msg from '../models/Msg';
+import { alignPropType } from 'react-bootstrap/esm/types';
 
 function MessageSender(props: {convoId: string, setConvoId: (newConvoId: string) => void, messageList: Msg[], setMessagesList: (msgs: Msg[]) => void}) {
   const {convoId, setConvoId, messageList, setMessagesList} = props;
 
   const [isEditable, setIsEditable] = useState(true);
-  const questionInput = useRef<HTMLInputElement>(null);
+  const questionInput = useRef<HTMLTextAreaElement>(null);
   const [question, setQuestion] = useState('');
   const [isValidPrompt, setIsValidPrompt] = useState(false);
   
 
-  const handleQuestionChange = (event: { target: { value: any; }; }) => {
-    const textValue = event.target.value;
+  const handleQuestionChange = (event: { target: { value: string; }; }) => {
+    const textValue = event.target.value.trim().replaceAll("\n","");
     setIsValidPrompt(() => textValue.length > 4);
     if (isValidPrompt)
     {
@@ -59,13 +60,15 @@ function MessageSender(props: {convoId: string, setConvoId: (newConvoId: string)
     });
   }
 
-  return <Form.Group as={Row} className="mb-2">
-    <Form.Label column sm="1">
-      Prompt
-    </Form.Label>
-    <Col sm="10">
-      <Form.Control ref={questionInput} id="chatInput" onChange={handleQuestionChange} disabled={!isEditable} placeholder="" />
-      <div className="smallPadding"><Button type="button" id="sendButton" onClick={() => askChatNow()} disabled={!isEditable || !isValidPrompt}><Send /> Send</Button></div>
+  return <Form.Group as={Row} className="mb-3">
+    <Col sm="12">
+      <Stack direction="vertical" style={{alignItems: "stretch", justifyContent: "center"}} gap={1}>
+        <Form.Label >Ask ChatGPT a Question:</Form.Label>
+        <Stack>
+          <Form.Control as="textarea" rows={2} ref={questionInput} id="chatInput" onChange={handleQuestionChange} disabled={!isEditable} placeholder="" />
+          <div className="smallPadding"><Button type="button" id="sendButton" onClick={() => askChatNow()} disabled={!isEditable || !isValidPrompt}><Send /> Send</Button></div>
+        </Stack>
+      </Stack>
     </Col>
   </Form.Group>;
 }

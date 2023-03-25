@@ -14,9 +14,10 @@ function delay(t: number) {
 }
 
 const findConversations = (allConvos: Convo[] | undefined, searchTerms: string) => {
-    return delay(400).then(() => {
+    const cleanedSearch = searchTerms.trim().toLowerCase();
+    return delay(500).then(() => {
         if (!allConvos || allConvos.length < 1) return undefined;
-        const matches = allConvos.filter(convo => convo.id.includes(searchTerms) || convo.messages.find(msg => msg.message.includes(searchTerms)));
+        const matches = allConvos.filter(convo => convo.id.toLowerCase().includes(cleanedSearch) || convo.messages.find(msg => msg.message.toLowerCase().includes(cleanedSearch)));
         return matches;
     });
 }

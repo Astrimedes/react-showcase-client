@@ -20,15 +20,11 @@ const ConversationQueryResults = (props: {allConvos: Convo[] | undefined, query:
         });
     }, [deferredQuery, allConvos]);
 
-    // useEffect(() => {
-    //     console.log(`query: ${query}, deferredQuery: ${deferredQuery}`);
-    // }, [query, deferredQuery]);
-
     return (
         <>
             <Row className="mb-3">
                 <Col sm="12">
-                    <FormLabel>{(deferredQuery?.length > 0 ? 'Matches: ' : 'Conversations: ') + `${matchConvos?.length ?? 0}`}</FormLabel>
+                    <FormLabel className="text-primary">{(deferredQuery?.length > 0 ? 'Matches: ' : 'Conversations: ') + `${matchConvos?.length ?? 0}`}</FormLabel>
                 </Col>                
             </Row>
             <Row className="mb-3">

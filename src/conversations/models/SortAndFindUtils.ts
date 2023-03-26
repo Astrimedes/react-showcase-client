@@ -13,13 +13,13 @@ function delay(t: number) {
     return new Promise(resolve => setTimeout(resolve, t));
 }
 
-const findConversationsAsync = (allConvos: Convo[] | undefined, searchTerms: string, delayTime = 100) => {
+const findConversationsAsync = (allConvos: Convo[] | undefined, searchTerms: string, delayTime = 150) => {
     return delay(delayTime).then(() => {
         return findConversations(allConvos, searchTerms, 0);
     })
 }
 
-const findConversations = (allConvos: Convo[] | undefined, searchTerms: string, delayTime = 100) => {
+const findConversations = (allConvos: Convo[] | undefined, searchTerms: string, delayTime = 150) => {
     const cleanedSearch = searchTerms.trim().toLowerCase();
     let start = performance.now();
     while(performance.now() - start < delayTime) {

@@ -9,6 +9,7 @@ import { delay } from '../models/SortAndFindUtils';
 import Msg from '../models/Msg';
 import { RenderOption } from '../models/RenderOptions';
 import ConversationQueryResultsNoDeferred from './ConversationQueryResultsRenderStandard';
+import ConversationQueryResultsRenderTransition from './ConversationQueryResultsRenderTransition';
 
 const resolveMessagesAgainstConvos = (currentAllConvos: Convo[] | undefined, currentMsgList: Msg[] | undefined) => {
     //  add current convo, remove stale loaded version
@@ -87,6 +88,7 @@ function ConversationSearch(props: {messageList: Msg[] | undefined, renderOption
                             : isLoadingError ? <h3 className="text-danger">Error Loading Conversations</h3>
                                 : renderOption == 'standard' ? <ConversationQueryResultsNoDeferred query={searchTerms} allConvos={allConvos} /> 
                                 : renderOption == 'deferred' ? <ConversationQueryResultsRenderDeferred query={searchTerms} allConvos={allConvos} />
+                                : renderOption == 'transition' ? <ConversationQueryResultsRenderTransition query={searchTerms} allConvos={allConvos} />
                                 : ''
                         }
                     </Col>                

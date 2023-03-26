@@ -14,7 +14,7 @@ const RenderOptionSelector = (props: {renderMode: RenderOption, setRenderMode: R
                     <Form.Select aria-label={`Render Mode: ${renderState}`} onChange={e => setRenderState(e.currentTarget.value as RenderOption)}>
                         <option value="standard">Standard (no deferred/transitions)</option>
                         <option value="deferred">Deferred (useDeferredValue)</option>
-                        <option value="transition">*Transition (useTransition)</option>
+                        <option value="transition">Transition (useTransition)</option>
                     </Form.Select>
                 </Stack>
             </Col>

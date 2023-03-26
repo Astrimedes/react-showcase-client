@@ -1,7 +1,7 @@
 import Button from 'react-bootstrap/Button';
 import { Col, Form, Row, Stack } from 'react-bootstrap';
-import { Send } from 'react-bootstrap-icons';
-import { RefObject, SetStateAction, useRef, useState } from 'react';
+import { Send, SignIntersection, Trash3 } from 'react-bootstrap-icons';
+import { RefObject, SetStateAction, useEffect, useRef, useState } from 'react';
 import { askChat } from '../../chaptGptLib';
 import Msg from '../models/Msg';
 import { alignPropType } from 'react-bootstrap/esm/types';
@@ -13,7 +13,6 @@ function MessageSender(props: {convoId: string, setConvoId: (newConvoId: string)
   const questionInput = useRef<HTMLTextAreaElement>(null);
   const [question, setQuestion] = useState('');
   const [isValidPrompt, setIsValidPrompt] = useState(false);
-  
 
   const handleQuestionChange = (event: { target: { value: string; }; }) => {
     const textValue = event.target.value.trim().replaceAll("\n","");
@@ -63,10 +62,13 @@ function MessageSender(props: {convoId: string, setConvoId: (newConvoId: string)
   return <Form.Group as={Row} className="mb-3">
     <Col sm="12">
       <Stack direction="vertical" style={{alignItems: "stretch", justifyContent: "center"}} gap={1}>
-        <Form.Label >Ask ChatGPT a Question:</Form.Label>
+        <Form.Label>Ask ChatGPT a Question:</Form.Label>
         <Stack>
           <Form.Control as="textarea" rows={2} ref={questionInput} id="chatInput" onChange={handleQuestionChange} disabled={!isEditable} placeholder="" />
-          <div className="smallPadding"><Button type="button" id="sendButton" onClick={() => askChatNow()} disabled={!isEditable || !isValidPrompt}><Send /> Send</Button></div>
+          <Stack direction="horizontal">
+            <div className="smallPadding"><Button type="button" id="sendButton" onClick={() => askChatNow()} disabled={!isEditable || !isValidPrompt}><Send /> Send</Button></div>
+            <div className={`smallPadding ms-auto ${!isEditable || !convoId ? 'hidden-item' : ''}`}><Button type="button" id="resetConvoButton" variant='danger' onClick={() => setConvoId("")} disabled={!isEditable || !convoId}><Trash3 /></Button></div>
+          </Stack>
         </Stack>
       </Stack>
     </Col>

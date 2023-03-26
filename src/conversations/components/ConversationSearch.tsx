@@ -28,8 +28,8 @@ const resolveMessagesAgainstConvos = (currentAllConvos: Convo[] | undefined, cur
     return nextConvos;
 };
 
-function ConversationSearch(props: {partialConvo: Msg[] | undefined}) {
-    const {partialConvo: messageList} = props;
+function ConversationSearch(props: {messageList: Msg[] | undefined}) {
+    const {messageList} = props;
     const [shouldReload, setShouldReload] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingError, setIsLoadingError] = useState(false);
@@ -71,7 +71,7 @@ function ConversationSearch(props: {partialConvo: Msg[] | undefined}) {
                     <Col sm="12">
                         <Row className="mb-3">
                             <Stack direction="vertical" gap={1}>
-                                <Form.Label>Message Search Terms</Form.Label>
+                                <Form.Label>Search for a Conversation:</Form.Label>
                                 <Form.Control as="textarea" rows={2} value={searchTerms} onChange={(e) => setSearchTerms(e.target.value)}></Form.Control>
                             </Stack>
                         </Row>
@@ -81,7 +81,7 @@ function ConversationSearch(props: {partialConvo: Msg[] | undefined}) {
                 <Row className="mb-3">
                     <Col sm="12">
                         { 
-                            isLoading ? <h3 className="text-secondary">Loading...</h3>
+                            isLoading ? <h3 className="text-warning">Loading...</h3>
                             : isLoadingError ? <h3 className="text-danger">Error Loading Conversations</h3>
                             : <ConversationQueryResults query={searchTerms} allConvos={allConvos} />
                         }

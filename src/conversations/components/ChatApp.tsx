@@ -1,7 +1,7 @@
 import './ChatApp.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Col, Form, Row, Tab, Tabs } from 'react-bootstrap';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MessageList from './MessageList';
 import Msg from '../models/Msg';
 import MessageSender from './MessageSender';
@@ -36,7 +36,7 @@ function ChatApp() {
                 </Row>
                 <Row className="mb-3">
                   <Col sm="12" className={messagesList?.length ? "" : "hidden-item"}>
-                      <ConversationController editable={true} setConvoId={setConvoId} convoId={convoId} setMessagesList={setMessagesList}/>
+                      <ConversationController editable={true} setConvoId={setConvoId} convoId={convoId} setMessagesList={setMessagesList} messagesList={messagesList}/>
                   </Col>
                 </Row>
                 <Form.Group as={Row} className="mb-3">
@@ -45,7 +45,7 @@ function ChatApp() {
               </Form>
             </Tab>
             <Tab eventKey="search" title="Search">
-              <ConversationSearch partialConvo={messagesList} />
+              <ConversationSearch messageList={messagesList} />
             </Tab>
           </Tabs>
         </div>

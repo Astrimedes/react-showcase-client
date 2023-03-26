@@ -42,3 +42,17 @@
 .hidden-item {
   display: none;
 }
+
+.text-darkblue {
+  color:#2274A5;
+}
+
+.bg-darkblue {
+  background: #2274A5;
+}
+
+.form-label {
+  color: #2274A5;
+  font-weight: bold;
+}
+

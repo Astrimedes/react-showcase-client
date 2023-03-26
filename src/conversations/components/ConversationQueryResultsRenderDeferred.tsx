@@ -1,24 +1,20 @@
 import './ChatApp.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Col, FormLabel, Row } from 'react-bootstrap';
-import { useDeferredValue, useEffect, useMemo, useState } from 'react';
+import { startTransition, useDeferredValue, useEffect, useMemo, useState } from 'react';
 import ConversationList from './ConversationList';
 import Convo from '../models/Convo';
-import { findConversation } from '../models/SortAndFindUtils';
+import { findConversations, findConversationsAsync } from '../models/SortAndFindUtils';
 
-const ConversationQueryResults = (props: {allConvos: Convo[] | undefined, query: string}) => {
+const ConversationQueryResultsRenderDeferred = (props: {allConvos: Convo[] | undefined, query: string}) => {
     const {allConvos, query} = props;
     const deferredQuery = useDeferredValue(query);
-    const [isLoading, setIsLoading] = useState(allConvos === undefined);
-    const [matchConvos, setMatchConvos] = useState(allConvos);
+    const [isLoading, setIsLoading] = useState(false);
     
-    useMemo(() => {
-        setIsLoading(true);
-        findConversation(allConvos, deferredQuery).then((convos) => {
-            setMatchConvos(convos);
-            setIsLoading(false);
-        });
-    }, [deferredQuery, allConvos]);
+     const matchConvos = useMemo(() => {
+        let convos = findConversations(allConvos, deferredQuery);
+        return convos;
+    }, [deferredQuery]);
 
     return (
         <>
@@ -29,12 +25,15 @@ const ConversationQueryResults = (props: {allConvos: Convo[] | undefined, query:
             </Row>
             <Row className="mb-3">
                 <Col sm="12">
-                    <ConversationList conversations={matchConvos} />
+                    {
+                        isLoading ? (<FormLabel className='text-warning'>Loading...</FormLabel>) 
+                        : (<ConversationList conversations={matchConvos} />)
+                    }
                 </Col>                
             </Row>
         </>
     );
 };
 
-export default ConversationQueryResults;
+export default ConversationQueryResultsRenderDeferred;
 

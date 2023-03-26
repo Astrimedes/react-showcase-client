@@ -3,10 +3,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Col, Form, Row, Stack } from 'react-bootstrap';
 import { useDeferredValue, useEffect, useMemo, useState, useTransition } from 'react';
 import Convo from '../models/Convo';
-import ConversationQueryResults from './ConversationQueryResults';
+import ConversationQueryResultsRenderDeferred from './ConversationQueryResultsRenderDeferred';
 import { getAllConversations } from '../../chaptGptLib';
 import { delay } from '../models/SortAndFindUtils';
 import Msg from '../models/Msg';
+import { RenderOption } from '../models/RenderOptions';
+import ConversationQueryResultsNoDeferred from './ConversationQueryResultsRenderStandard';
 
 const resolveMessagesAgainstConvos = (currentAllConvos: Convo[] | undefined, currentMsgList: Msg[] | undefined) => {
     //  add current convo, remove stale loaded version
@@ -28,8 +30,8 @@ const resolveMessagesAgainstConvos = (currentAllConvos: Convo[] | undefined, cur
     return nextConvos;
 };
 
-function ConversationSearch(props: {messageList: Msg[] | undefined}) {
-    const {messageList} = props;
+function ConversationSearch(props: {messageList: Msg[] | undefined, renderOption: RenderOption}) {
+    const {messageList, renderOption} = props;
     const [shouldReload, setShouldReload] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingError, setIsLoadingError] = useState(false);
@@ -83,7 +85,9 @@ function ConversationSearch(props: {messageList: Msg[] | undefined}) {
                         { 
                             isLoading ? <h3 className="text-warning">Loading...</h3>
                             : isLoadingError ? <h3 className="text-danger">Error Loading Conversations</h3>
-                            : <ConversationQueryResults query={searchTerms} allConvos={allConvos} />
+                                : renderOption == 'standard' ? <ConversationQueryResultsNoDeferred query={searchTerms} allConvos={allConvos} /> 
+                                : renderOption == 'deferred' ? <ConversationQueryResultsRenderDeferred query={searchTerms} allConvos={allConvos} />
+                                : ''
                         }
                     </Col>                
                 </Row>

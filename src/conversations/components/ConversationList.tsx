@@ -1,9 +1,15 @@
 import { Accordion, Row } from "react-bootstrap";
-import { Fragment } from "react";
+import { Fragment, useTransition, useState, useEffect } from "react";
 import Conversation from "./Conversation";
 import Convo from "../models/Convo";
 
 const createConvoElements = (conversations: Convo[] | undefined) => {
+    // let arr = [];
+    // console.log('Building convoList...')
+    // for(let i = 0; i < 9999999; i++) {
+    //     arr.push(Math.sqrt(2 + (i * 2.1)));
+    // }
+    console.log('...done building convoList.')
     return conversations?.map((convo, index, array) => {
         return convo?.messages?.length > 1 ? 
             (<Conversation key={index} convoId={convo?.id ?? 'no-id'} messages={convo.messages} opacity={1}></Conversation>) :
@@ -11,9 +17,12 @@ const createConvoElements = (conversations: Convo[] | undefined) => {
     })
 }
 
+
+
 const ConversationList = (props: {conversations: Convo[] | undefined}) =>
 { 
     const {conversations} = props;
+
     return (
         <Row>
             <Accordion>

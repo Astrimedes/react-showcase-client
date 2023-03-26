@@ -13,13 +13,20 @@ function delay(t: number) {
     return new Promise(resolve => setTimeout(resolve, t));
 }
 
-const findConversations = (allConvos: Convo[] | undefined, searchTerms: string) => {
+const findConversationsAsync = (allConvos: Convo[] | undefined, searchTerms: string, delayTime = 100) => {
+    return delay(delayTime).then(() => {
+        return findConversations(allConvos, searchTerms, 0);
+    })
+}
+
+const findConversations = (allConvos: Convo[] | undefined, searchTerms: string, delayTime = 100) => {
     const cleanedSearch = searchTerms.trim().toLowerCase();
-    return delay(500).then(() => {
-        if (!allConvos || allConvos.length < 1) return undefined;
-        const matches = allConvos.filter(convo => convo.id.toLowerCase().includes(cleanedSearch) || convo.messages.find(msg => msg.message.toLowerCase().includes(cleanedSearch)));
-        return matches;
-    });
+    let start = performance.now();
+    while(performance.now() - start < delayTime) {
+        // do nothing
+    }
+    if (!allConvos || allConvos.length < 1) return undefined;
+    return allConvos.filter(convo => convo.id.toLowerCase().includes(cleanedSearch) || convo.messages.find(msg => msg.message.toLowerCase().includes(cleanedSearch)));
 }
 
 const conversationArraysAreEqual = (convos1: Convo[] | undefined, convos2: Convo[] | undefined) => {
@@ -32,4 +39,4 @@ const conversationArraysAreEqual = (convos1: Convo[] | undefined, convos2: Convo
     })
 }
 
-export { sortMessages, findConversations as findConversation, conversationArraysAreEqual, delay }
+export { sortMessages, findConversations, findConversationsAsync, conversationArraysAreEqual, delay }

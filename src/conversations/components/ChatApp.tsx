@@ -1,17 +1,20 @@
 import './ChatApp.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Col, Form, Row, Tab, Tabs } from 'react-bootstrap';
+import { Col, Form, Row, Stack, Tab, Tabs } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import MessageList from './MessageList';
 import Msg from '../models/Msg';
 import MessageSender from './MessageSender';
 import { ConversationController } from './ConversationController';
 import ConversationSearch from './ConversationSearch';
+import { RenderOption } from '../models/RenderOptions';
+import RenderOptionSelector from './RenderOptionSelector';
 
 function ChatApp() {
   const [convoId, setConvoId] = useState("");
   const [messagesList, setMessagesList] = useState(new Array<Msg>());
   const [activeTabKey, setActiveTabKey] = useState('talk');
+  const [renderMode, setRenderMode] = useState<RenderOption>("standard");
 
   function handleTabChange(key: string | null) {
     setActiveTabKey(key ?? 'talk');
@@ -45,7 +48,12 @@ function ChatApp() {
               </Form>
             </Tab>
             <Tab eventKey="search" title="Search">
-              <ConversationSearch messageList={messagesList} />
+              <ConversationSearch messageList={messagesList} renderOption={renderMode} />
+            </Tab>
+            <Tab eventKey="settings" title="Settings">
+              <Stack>
+                <RenderOptionSelector setRenderMode={setRenderMode} renderMode={renderMode}></RenderOptionSelector>
+              </Stack>
             </Tab>
           </Tabs>
         </div>

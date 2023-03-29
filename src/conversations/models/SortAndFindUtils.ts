@@ -30,7 +30,6 @@ const findConversations = (allConvos: Convo[] | undefined, searchTerms: string, 
 }
 
 const conversationArraysAreEqual = (convos1: Convo[] | undefined, convos2: Convo[] | undefined) => {
-    console.log('checking convo arrays for equality...');
     if (convos1 === convos2) return true; // covers undefined
     if (!convos1 || !convos2) return false; // bail if any are still undefined
     if (convos1.length !== convos2.length) return false;

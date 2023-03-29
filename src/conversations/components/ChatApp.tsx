@@ -1,7 +1,7 @@
 import './ChatApp.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Col, Form, Row, Stack, Tab, Tabs } from 'react-bootstrap';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import MessageList from './MessageList';
 import Msg from '../models/Msg';
 import MessageSender from './MessageSender';
@@ -25,7 +25,7 @@ function ChatApp() {
       <div className='hide-x-scroll'>
         <h1 className="text-center text-white text-wrap bg-primary">
           <p>
-            Demo Chat
+            Demo AI Chat
           </p>
         </h1>
         <div id="mainApp">
@@ -48,12 +48,10 @@ function ChatApp() {
               </Form>
             </Tab>
             <Tab eventKey="search" title="Search">
-              <ConversationSearch messageList={messagesList} renderOption={renderMode} />
-            </Tab>
-            <Tab eventKey="settings" title="Settings">
-              <Stack>
-                <RenderOptionSelector setRenderMode={setRenderMode} renderMode={renderMode}></RenderOptionSelector>
-              </Stack>
+                <Row className="mb-3 inset-children">
+                  <RenderOptionSelector setRenderMode={setRenderMode} renderMode={renderMode}></RenderOptionSelector>
+                </Row>
+                <ConversationSearch messageList={messagesList} renderOption={renderMode} />
             </Tab>
           </Tabs>
         </div>

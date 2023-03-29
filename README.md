@@ -1,14 +1,32 @@
-# Demonstrating React 18 features:
-Demonstrate new React 18 concurrency:
-- useTransition
-- useDeferredValue
+# "Demo AI Chat App" - Using React 18 Concurrent Rendering features:
 
+Demonstrate new React 18 concurrent rendering hooks:
+- **useTransition**
+- **useDeferredValue**
 
+## Setup
+Add a .env file to the root of the project that contains:
+```
+REACT_APP_CHAT_SERVER_PROTOCOL=http
+REACT_APP_CHAT_SERVER_HOST=localhost
+REACT_APP_CHAT_SERVER_PORT=300
+```
 
+## "Talk" tab
 
-## Default Create-React-App readme
+Send messages to an AI language model and get responses. Messages and responses will be stored in a "conversation" on the server.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## "Search" tab
+
+Search all the conversations (ids and messages content) for your input. *Note: the search function is dramatically inefficient in order to demonstrate the rendering behavior*
+
+### "Render Options": React Concurrent Rendering Hooks Demonstration
+
+Select any of:
+    - **Standard**: search input is immediately used to search conversations.
+    - **Deferred**: uses the **useDeferredValue** React 18 hook instead of the current search input value to search for results. The deferred value is the value used for the last completed render result. The deferred value eventually "catches up" to the current value. This obviates the need for a clunkier debounce function and keeps the UI responsive.
+    - **Transition**: uses the **useTransition** React 18 hook to define the search function as "low priority" - causing it to be performed after other state updates and keep UI responsive.
+
 
 ## Available Scripts
 
@@ -19,14 +37,6 @@ In the project directory, you can run:
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
 ### `npm run build`
 
 Builds the app for production to the `build` folder.\
@@ -36,19 +46,3 @@ The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).

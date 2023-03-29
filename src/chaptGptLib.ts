@@ -59,8 +59,6 @@ const getAllConversations = async () => {
             },
         });
 
-        console.log(response);
-
         const allConvos = await response.json() as Convo[];
         return allConvos;
     } catch(e) {

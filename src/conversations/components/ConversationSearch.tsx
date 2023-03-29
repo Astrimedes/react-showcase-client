@@ -1,7 +1,7 @@
 import './ChatApp.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Col, Form, Row, Stack } from 'react-bootstrap';
-import { useDeferredValue, useEffect, useMemo, useState, useTransition } from 'react';
+import { useEffect, useState } from 'react';
 import Convo from '../models/Convo';
 import ConversationQueryResultsRenderDeferred from './ConversationQueryResultsRenderDeferred';
 import { getAllConversations } from '../../chaptGptLib';
@@ -17,7 +17,7 @@ const resolveMessagesAgainstConvos = (currentAllConvos: Convo[] | undefined, cur
     let currentConvo: Convo | undefined;
     if (currentMsgList !== undefined && currentMsgList.length > 0 && currentMsgList[0] !== undefined) {
         currentConvo = new Convo(currentMsgList[0].id, currentMsgList);
-        let matchIdx = currentAllConvos?.findIndex(c => c.id == currentMsgList[0].conversationId);
+        let matchIdx = currentAllConvos?.findIndex(c => c.id === currentMsgList[0].conversationId);
         // remove it if present
         if (matchIdx) {
             nextConvos.splice(matchIdx, 1);
@@ -41,7 +41,6 @@ function ConversationSearch(props: {messageList: Msg[] | undefined, renderOption
 
     useEffect(() => {
         if (shouldReload && !isLoading) {
-            console.log(`preparing the call to get convos...`);
             setIsLoading(true);
             setShouldReload(false);
             delay(3000)
@@ -86,10 +85,10 @@ function ConversationSearch(props: {messageList: Msg[] | undefined, renderOption
                         { 
                             isLoading ? <h3 className="text-warning">Loading...</h3>
                             : isLoadingError ? <h3 className="text-danger">Error Loading Conversations</h3>
-                                : renderOption == 'standard' ? <ConversationQueryResultsNoDeferred query={searchTerms} allConvos={allConvos} /> 
-                                : renderOption == 'deferred' ? <ConversationQueryResultsRenderDeferred query={searchTerms} allConvos={allConvos} />
-                                : renderOption == 'transition' ? <ConversationQueryResultsRenderTransition query={searchTerms} allConvos={allConvos} />
-                                : ''
+                            : renderOption === 'standard' ? <ConversationQueryResultsNoDeferred query={searchTerms} allConvos={allConvos} /> 
+                            : renderOption === 'deferred' ? <ConversationQueryResultsRenderDeferred query={searchTerms} allConvos={allConvos} />
+                            : renderOption === 'transition' ? <ConversationQueryResultsRenderTransition query={searchTerms} allConvos={allConvos} />
+                            : ''
                         }
                     </Col>                
                 </Row>

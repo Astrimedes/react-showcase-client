@@ -1,4 +1,4 @@
-# "Demo AI Chat App" - Using React 18 Concurrent Rendering features:
+# "Demo AI Chat App" - Using React 18 Concurrent Rendering features
 
 Demonstrate new React 18 concurrent rendering hooks:
 - **useTransition**
@@ -20,9 +20,8 @@ Send messages to an AI language model and get responses. Messages and responses 
 
 Search all the conversations (ids and messages content) for your input. *Note: the search function is dramatically inefficient in order to demonstrate the rendering behavior*
 
-### "Render Options": React Concurrent Rendering Hooks Demonstration
-
-Select any of:
+## "Render Options": React Concurrent Rendering Hooks Demonstration
+In the "Search" tab, select any of:
     - **Standard**: search input is immediately used to search conversations.
     - **Deferred**: uses the **useDeferredValue** React 18 hook instead of the current search input value to search for results. The deferred value is the value used for the last completed render result. The deferred value eventually "catches up" to the current value. This obviates the need for a clunkier debounce function and keeps the UI responsive.
     - **Transition**: uses the **useTransition** React 18 hook to define the search function as "low priority" - causing it to be performed after other state updates and keep UI responsive.

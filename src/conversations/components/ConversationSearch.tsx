@@ -1,7 +1,7 @@
 import './ChatApp.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Col, Form, Row, Stack } from 'react-bootstrap';
-import { useEffect, useState } from 'react';
+import { useDeferredValue, useEffect, useState } from 'react';
 import Convo from '../models/Convo';
 import ConversationQueryResultsRenderDeferred from './ConversationQueryResultsRenderDeferred';
 import { getAllConversations } from '../../chaptGptLib';
@@ -38,6 +38,7 @@ function ConversationSearch(props: {messageList: Msg[] | undefined, renderOption
     const [isLoadingError, setIsLoadingError] = useState(false);
     const [searchTerms, setSearchTerms] = useState("");
     const [allConvos, setAllConvos] = useState<Convo[] | undefined>(undefined);
+    const deferredSearch = useDeferredValue(searchTerms);
 
     useEffect(() => {
         if (shouldReload && !isLoading) {
@@ -86,7 +87,7 @@ function ConversationSearch(props: {messageList: Msg[] | undefined, renderOption
                             isLoading ? <h3 className="text-warning">Loading...</h3>
                             : isLoadingError ? <h3 className="text-danger">Error Loading Conversations</h3>
                             : renderOption === 'standard' ? <ConversationQueryResultsNoDeferred query={searchTerms} allConvos={allConvos} /> 
-                            : renderOption === 'deferred' ? <ConversationQueryResultsRenderDeferred query={searchTerms} allConvos={allConvos} />
+                            : renderOption === 'deferred' ? <ConversationQueryResultsRenderDeferred query={deferredSearch} allConvos={allConvos} />
                             : renderOption === 'transition' ? <ConversationQueryResultsRenderTransition query={searchTerms} allConvos={allConvos} />
                             : ''
                         }

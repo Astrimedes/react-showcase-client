@@ -46,7 +46,7 @@ function ConversationSearch(props: {messageList: Msg[] | undefined, renderOption
             delay(3000)
                 .then(getAllConversations)
                 .then(convoResponse => {
-                    if (!(convoResponse instanceof Array<Convo>)) {
+                    if (!(convoResponse instanceof Array)) {
                         throw new Error("loading error");
                     }
                     return convoResponse as Array<Convo>;

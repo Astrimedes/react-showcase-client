@@ -11,13 +11,19 @@ const ConversationQueryResultsRenderTransition = (props: {allConvos: Convo[] | u
     const [isLoading, setIsLoading] = useState(false);
     const [matchConvos, setMatchConvos] = useState(allConvos);
     const [isTransitioning, startTransition] = useTransition();
+    const [performSearch, setPerformSearch] = useState(false);
 
     useEffect(() => {
+        if (!performSearch) setPerformSearch(true);
+    }, [query])
+
+    if (performSearch) {
         startTransition(() => {
             let convos = findConversations(allConvos, query);
             setMatchConvos(convos);
         });
-    }, [query])
+        setPerformSearch(false);
+    }
 
     return (
         <>

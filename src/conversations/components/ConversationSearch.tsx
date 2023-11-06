@@ -74,7 +74,7 @@ function ConversationSearch(props: {messageList: Msg[] | undefined, renderOption
                         <Row className="mb-3">
                             <Stack direction="vertical" gap={1}>
                                 <Form.Label>Search for a Conversation:</Form.Label>
-                                <Form.Control as="textarea" rows={2} value={searchTerms} onChange={(e) => setSearchTerms(e.target.value)}></Form.Control>
+                                <Form.Control as="textarea" rows={2} onChange={(e) => setSearchTerms(e.target.value)}></Form.Control>
                             </Stack>
                         </Row>
                     </Col>

@@ -1,15 +1,13 @@
 import './ChatApp.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Col, Form, Row, Stack } from 'react-bootstrap';
-import { useDeferredValue, useEffect, useState } from 'react';
+import { startTransition, useDeferredValue, useEffect, useState } from 'react';
 import Convo from '../models/Convo';
-import ConversationQueryResultsRenderDeferred from './ConversationQueryResultsRenderDeferred';
 import { getAllConversations } from '../../chaptGptLib';
 import { delay } from '../models/SortAndFindUtils';
 import Msg from '../models/Msg';
 import { RenderOption } from '../models/RenderOptions';
 import ConversationQueryResultsNoDeferred from './ConversationQueryResultsRenderStandard';
-import ConversationQueryResultsRenderTransition from './ConversationQueryResultsRenderTransition';
 
 const resolveMessagesAgainstConvos = (currentAllConvos: Convo[] | undefined, currentMsgList: Msg[] | undefined) => {
     //  add current convo, remove stale loaded version
@@ -61,11 +59,21 @@ function ConversationSearch(props: {messageList: Msg[] | undefined, renderOption
                     setIsLoading(false);
                 })
         }
-    }, [shouldReload])
+    }, [shouldReload, isLoading, messageList])
 
     useEffect(() => {
         setAllConvos(resolveMessagesAgainstConvos(allConvos, messageList));
-    }, [messageList])
+    }, [messageList, allConvos])
+
+    const updateSearchTerms = (newSearchTerms: string) => {
+        if (renderOption === 'transition') {
+            startTransition(() => {
+                setSearchTerms(newSearchTerms);
+            })
+        } else {
+            setSearchTerms(newSearchTerms);
+        }
+    };
 
     return (
         <>
@@ -75,7 +83,7 @@ function ConversationSearch(props: {messageList: Msg[] | undefined, renderOption
                         <Row className="mb-3">
                             <Stack direction="vertical" gap={1}>
                                 <Form.Label>Search for a Conversation:</Form.Label>
-                                <Form.Control as="textarea" rows={2} onChange={(e) => setSearchTerms(e.target.value)}></Form.Control>
+                                <Form.Control as="textarea" rows={2} onChange={(e) => updateSearchTerms(e.target.value)}></Form.Control>
                             </Stack>
                         </Row>
                     </Col>
@@ -86,10 +94,7 @@ function ConversationSearch(props: {messageList: Msg[] | undefined, renderOption
                         { 
                             isLoading ? <h3 className="text-warning">Loading...</h3>
                             : isLoadingError ? <h3 className="text-danger">Error Loading Conversations</h3>
-                            : renderOption === 'standard' ? <ConversationQueryResultsNoDeferred query={searchTerms} allConvos={allConvos} /> 
-                            : renderOption === 'deferred' ? <ConversationQueryResultsRenderDeferred query={deferredSearch} allConvos={allConvos} />
-                            : renderOption === 'transition' ? <ConversationQueryResultsRenderTransition query={searchTerms} allConvos={allConvos} />
-                            : ''
+                            : <ConversationQueryResultsNoDeferred query={renderOption === 'deferred' ? deferredSearch : searchTerms} allConvos={allConvos} />
                         }
                     </Col>                
                 </Row>

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './styling/index.css';
+import './styling/AppStyles.css';
 import reportWebVitals from './reportWebVitals';
 import ChatApp from './chat-app/ChatApp';
 

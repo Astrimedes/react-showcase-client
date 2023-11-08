@@ -46,9 +46,9 @@ function MessageSender(props: {convoId: string, setConvoId: (newConvoId: string)
     .finally(() => {
       setIsEditable(true);
       // clear question input
-      if (questionInput.current != null) questionInput.current.value = "";
+      if (questionInput.current !== null) questionInput.current.value = "";
       // set new convo id if needed
-      if (replyMsg != undefined && replyMsg?.conversationId != convoId)
+      if (replyMsg !== undefined && replyMsg?.conversationId !== convoId)
       {
         setConvoId(replyMsg.conversationId);
       } else {

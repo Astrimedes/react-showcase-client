@@ -1,18 +1,17 @@
 import '../styling/ChatAppStyles.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Col, FormLabel, Row } from 'react-bootstrap';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Convo, findConversations } from '../common';
 import { ConversationList } from '../conversations';
 
 const ConversationQueryResultsRenderStandard = (props: {allConvos: Convo[] | undefined, query: string}) => {
     const {allConvos, query} = props;
-    const [isLoading, setIsLoading] = useState(false);
     
      const matchConvos = useMemo(() => {
         let convos = findConversations(allConvos, query);
         return convos;
-    }, [query]);
+    }, [allConvos, query]);
 
     return (
         <>
@@ -23,10 +22,7 @@ const ConversationQueryResultsRenderStandard = (props: {allConvos: Convo[] | und
             </Row>
             <Row className="mb-3">
                 <Col sm="12">
-                    {
-                        isLoading ? (<FormLabel className='text-warning'>Loading...</FormLabel>) 
-                        : (<ConversationList conversations={matchConvos} />)
-                    }
+                    <ConversationList conversations={matchConvos} />
                 </Col>                
             </Row>
         </>

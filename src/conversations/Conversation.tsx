@@ -12,7 +12,6 @@ function Conversation(props: {convoId: string, messages: Msg[], opacity: number}
         {msg.role} said:<br/>{msg.message}
       </p>
     )});
-    const title = `${convoId} : ${sortedMessages[0].message.slice(0, 120)}`;
     
     return (
       <Accordion.Item eventKey={convoId} style={{opacity: opacity}}>

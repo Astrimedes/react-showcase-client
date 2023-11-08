@@ -4,4 +4,4 @@ const TRANSITION = 'transition';
 
 type RenderOption = typeof STANDARD | typeof DEFERRED | typeof TRANSITION;
 
-export { type RenderOption };
+export { type RenderOption}

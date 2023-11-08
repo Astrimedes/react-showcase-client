@@ -1,10 +1,8 @@
 import Button from 'react-bootstrap/Button';
 import { Col, Form, Row, Stack } from 'react-bootstrap';
-import { Send, SignIntersection, Trash3 } from 'react-bootstrap-icons';
-import { RefObject, SetStateAction, useEffect, useRef, useState } from 'react';
-import { askChat } from '../../chaptGptLib';
-import Msg from '../models/Msg';
-import { alignPropType } from 'react-bootstrap/esm/types';
+import { Send, Trash3 } from 'react-bootstrap-icons';
+import { useRef, useState } from 'react';
+import { Msg, askChat } from '../common';
 
 function MessageSender(props: {convoId: string, setConvoId: (newConvoId: string) => void, messageList: Msg[], setMessagesList: (msgs: Msg[]) => void}) {
   const {convoId, setConvoId, messageList, setMessagesList} = props;

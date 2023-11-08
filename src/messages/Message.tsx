@@ -1,5 +1,5 @@
 import Card from 'react-bootstrap/Card';
-import Msg from '../models/Msg';
+import { Msg } from '../common';
 
 function Message(props: {msg: Msg, opacity: number})
 { 

@@ -1,14 +1,11 @@
-import './ChatApp.css';
+import '../styling/ChatAppStyles.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Col, Form, Row, Stack, Tab, Tabs } from 'react-bootstrap';
+import { Col, Form, Row, Tab, Tabs } from 'react-bootstrap';
 import { useState } from 'react';
-import MessageList from './MessageList';
-import Msg from '../models/Msg';
-import MessageSender from './MessageSender';
-import { ConversationController } from './ConversationController';
-import ConversationSearch from './ConversationSearch';
-import { RenderOption } from '../models/RenderOptions';
-import RenderOptionSelector from './RenderOptionSelector';
+import { ConversationSearch, RenderOption, RenderOptionSelector } from '../search';
+import { MessageList, MessageSender } from '../messages';
+import { ConversationController } from '../conversations';
+import { Msg } from '../common';
 
 function ChatApp() {
   const [convoId, setConvoId] = useState("");

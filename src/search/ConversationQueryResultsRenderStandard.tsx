@@ -1,10 +1,9 @@
-import './ChatApp.css';
+import '../styling/ChatAppStyles.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Col, FormLabel, Row } from 'react-bootstrap';
 import { useMemo, useState } from 'react';
-import ConversationList from './ConversationList';
-import Convo from '../models/Convo';
-import { findConversations } from '../models/SortAndFindUtils';
+import { Convo, findConversations } from '../common';
+import { ConversationList } from '../conversations';
 
 const ConversationQueryResultsRenderStandard = (props: {allConvos: Convo[] | undefined, query: string}) => {
     const {allConvos, query} = props;

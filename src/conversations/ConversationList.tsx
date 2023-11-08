@@ -1,7 +1,7 @@
 import { Accordion, Row } from "react-bootstrap";
-import { Fragment, useTransition, useState, useEffect } from "react";
+import { Fragment } from "react";
 import Conversation from "./Conversation";
-import Convo from "../models/Convo";
+import { Convo } from "../common";
 
 const createConvoElements = (conversations: Convo[] | undefined) => {
     return conversations?.map((convo, index, array) => {
@@ -10,8 +10,6 @@ const createConvoElements = (conversations: Convo[] | undefined) => {
             (<Fragment key={index}></Fragment>)
     })
 }
-
-
 
 const ConversationList = (props: {conversations: Convo[] | undefined}) =>
 { 

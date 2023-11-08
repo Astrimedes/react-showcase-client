@@ -1,14 +1,10 @@
-import Message from "./Message";
-import { sortMessages } from "../models/SortAndFindUtils";
 import { Col, Row } from "react-bootstrap";
-import Msg from '../models/Msg';
-import { useDeferredValue } from "react";
+import { Msg, sortMessages } from "../common";
+import Message from "./Message";
 
 function MessageList(props: {messages: Msg[]})
 { 
     const {messages} = props;
-    const deferredMsgs = useDeferredValue(messages);
-
     const sortedMessages = sortMessages(messages);
 
     return (

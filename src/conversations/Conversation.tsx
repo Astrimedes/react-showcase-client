@@ -1,7 +1,5 @@
-import { Accordion, Form, Stack } from 'react-bootstrap';
-import Card from 'react-bootstrap/Card';
-import { sortMessages } from '../models/SortAndFindUtils';
-import Msg from '../models/Msg';
+import { Accordion, Stack } from 'react-bootstrap';
+import { Msg, sortMessages } from '../common';
 
 function Conversation(props: {convoId: string, messages: Msg[], opacity: number})
 { 

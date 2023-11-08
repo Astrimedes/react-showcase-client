@@ -1,13 +1,11 @@
-import './ChatApp.css';
+import '../styling/ChatAppStyles.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Col, Form, Row, Stack } from 'react-bootstrap';
-import { startTransition, useDeferredValue, useEffect, useState } from 'react';
-import Convo from '../models/Convo';
-import { getAllConversations } from '../../chaptGptLib';
-import { delay } from '../models/SortAndFindUtils';
-import Msg from '../models/Msg';
-import { RenderOption } from '../models/RenderOptions';
-import ConversationQueryResultsNoDeferred from './ConversationQueryResultsRenderStandard';
+import { useDeferredValue, useEffect, useState, useTransition } from 'react';
+import { Convo } from '../conversations';
+import { Msg, delay, getAllConversations } from '../common';
+import { RenderOption } from './RenderOptions';
+import ConversationQueryResultsRenderStandard from './ConversationQueryResultsRenderStandard';
 
 const resolveMessagesAgainstConvos = (currentAllConvos: Convo[] | undefined, currentMsgList: Msg[] | undefined) => {
     //  add current convo, remove stale loaded version
@@ -37,6 +35,7 @@ function ConversationSearch(props: {messageList: Msg[] | undefined, renderOption
     const [searchTerms, setSearchTerms] = useState("");
     const [allConvos, setAllConvos] = useState<Convo[] | undefined>(undefined);
     const deferredSearch = useDeferredValue(searchTerms);
+    const [isPending, startTransition] = useTransition();
 
     useEffect(() => {
         if (shouldReload && !isLoading) {
@@ -94,7 +93,10 @@ function ConversationSearch(props: {messageList: Msg[] | undefined, renderOption
                         { 
                             isLoading ? <h3 className="text-warning">Loading...</h3>
                             : isLoadingError ? <h3 className="text-danger">Error Loading Conversations</h3>
-                            : <ConversationQueryResultsNoDeferred query={renderOption === 'deferred' ? deferredSearch : searchTerms} allConvos={allConvos} />
+                            : <>
+                                {isPending ? <h4>useTransition: Rendering Batched...</h4> : null}
+                                <ConversationQueryResultsRenderStandard query={renderOption === 'deferred' ? deferredSearch : searchTerms} allConvos={allConvos} />
+                            </>
                         }
                     </Col>                
                 </Row>

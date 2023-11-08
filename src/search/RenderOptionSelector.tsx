@@ -1,5 +1,5 @@
 import { Col, Container, Form, Row } from "react-bootstrap";
-import { RenderOption } from "../models/RenderOptions";
+import { RenderOption } from "./RenderOptions";
 
 
 const RenderOptionSelector = (props: {renderMode: RenderOption, setRenderMode: React.Dispatch<React.SetStateAction<RenderOption>>}) =>

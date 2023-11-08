@@ -1,5 +1,5 @@
-import ChatServerResponse from "./conversations/models/ChatServerResponse";
-import Convo from "./conversations/models/Convo";
+import { Convo } from "../conversations";
+import ChatServerResponse from "./ChatServerResponse";
 
 const HOST_ENDPOINT = process.env.REACT_APP_CHAT_SERVER_PROTOCOL + "://" + process.env.REACT_APP_CHAT_SERVER_HOST + ":" + process.env.REACT_APP_CHAT_SERVER_PORT;
 const POST_ASK_ENDPOINT = HOST_ENDPOINT + "/message";

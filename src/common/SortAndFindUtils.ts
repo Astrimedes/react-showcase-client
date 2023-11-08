@@ -1,4 +1,3 @@
-import Conversation from "../components/Conversation";
 import Convo from "./Convo";
 import Msg from "./Msg";
 

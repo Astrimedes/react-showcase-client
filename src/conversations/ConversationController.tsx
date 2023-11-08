@@ -1,11 +1,8 @@
-import Button from 'react-bootstrap/Button';
-import { Col, Form, Row } from 'react-bootstrap';
-import { ArrowRepeat } from 'react-bootstrap-icons';
-import { startTransition, useCallback, useEffect, useRef, useState } from 'react';
-import Msg from '../models/Msg';
-import { getConvoMessages } from '../../chaptGptLib';
+import { Form, Row } from 'react-bootstrap';
+import { startTransition, useEffect, useState } from 'react';
+import { Msg, getConvoMessages } from '../common';
 
-export function ConversationController(props: {editable: boolean, setConvoId: (newConvoId: string) => void, messagesList: Msg[], setMessagesList: (msgs: Msg[]) => void, convoId: string}) {
+const ConversationController = (props: {editable: boolean, setConvoId: (newConvoId: string) => void, messagesList: Msg[], setMessagesList: (msgs: Msg[]) => void, convoId: string}) => {
   const {editable, convoId, setMessagesList, setConvoId, messagesList} = props;
   const [isEditable, setIsEditable] = useState(editable);
 
@@ -39,3 +36,5 @@ export function ConversationController(props: {editable: boolean, setConvoId: (n
   </>
   );
 }
+
+export default ConversationController;

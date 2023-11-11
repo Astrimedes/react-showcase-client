@@ -4,6 +4,7 @@ import { Col, FormLabel, Row } from 'react-bootstrap';
 import { useMemo } from 'react';
 import { Convo, findConversations } from '../common';
 import { ConversationList } from '../conversations';
+import StyleClassNames from '../styling';
 
 const ConversationQueryResultsRenderStandard = (props: {allConvos: Convo[] | undefined, query: string}) => {
     const {allConvos, query} = props;
@@ -15,12 +16,12 @@ const ConversationQueryResultsRenderStandard = (props: {allConvos: Convo[] | und
 
     return (
         <>
-            <Row className="mb-3">
+            <Row className={StyleClassNames.rowStandard}>
                 <Col sm="12">
-                    <FormLabel className="text-secondary">{(query?.length > 0 ? 'Matches: ' : 'Conversations: ') + `${matchConvos?.length ?? 0}`}</FormLabel>
+                    <FormLabel className={StyleClassNames.textSecondary}>{(query?.length > 0 ? 'Matches: ' : 'Conversations: ') + `${matchConvos?.length ?? 0}`}</FormLabel>
                 </Col>                
             </Row>
-            <Row className="mb-3">
+            <Row className={StyleClassNames.rowStandard}>
                 <Col sm="12">
                     <ConversationList conversations={matchConvos} searchText={query} />
                 </Col>                

@@ -1,6 +1,7 @@
 import { Accordion, Stack } from 'react-bootstrap';
 import { Msg, sortMessages } from '../common';
 import Highlighter from "react-highlight-words";
+import StyleClassNames from '../styling';
 
 function Conversation(props: {convoId: string, messages: Msg[], opacity: number, searchText: string})
 { 
@@ -9,32 +10,30 @@ function Conversation(props: {convoId: string, messages: Msg[], opacity: number,
     const sortedMessages = sortMessages(messages, false);
     const bodyElements = sortedMessages.map(msg => {
     return (
-      <p style={{opacity: opacity}} key={msg.id} className='smallText'>
+      <p style={{opacity: opacity}} key={msg.id} className={StyleClassNames.smallText}>
         {msg.role} said:<br/>
         <Highlighter
-          highlightClassName="highlight"
+          highlightClassName={StyleClassNames.highlight}
           searchWords={[searchText]}
           autoEscape={false}
           textToHighlight={msg.message}
         />
       </p>
     )});
-
-    const titleText = sortedMessages[0].message.slice(0, 120);
     
     return (
       <Accordion.Item eventKey={convoId} style={{opacity: opacity}}>
         <Accordion.Header>
           <Stack direction='vertical'>
-            <div><h5 className='text-primary'> 
+            <div><h5 className={StyleClassNames.textPrimary}> 
             <Highlighter
-              highlightClassName="highlight"
+              highlightClassName={StyleClassNames.highlight}
               searchWords={[searchText]}
               autoEscape={false}
-              textToHighlight={titleText}
+              textToHighlight={sortedMessages[0].message.slice(0, 120)}
               />
             </h5></div>
-            <div><h6 className='text-secondary'>ID: {convoId}</h6></div>
+            <div><h6 className={StyleClassNames.textSecondary}>ID: {convoId}</h6></div>
           </Stack>
         </Accordion.Header>
         <Accordion.Body>{bodyElements}</Accordion.Body>

@@ -3,6 +3,7 @@ import { Col, Form, Row, Stack } from 'react-bootstrap';
 import { Send, Trash3 } from 'react-bootstrap-icons';
 import { useRef, useState } from 'react';
 import { Msg, askChat } from '../common';
+import StyleClassNames from '../styling';
 
 function MessageSender(props: {convoId: string, setConvoId: (newConvoId: string) => void, messageList: Msg[], setMessagesList: (msgs: Msg[]) => void}) {
   const {convoId, setConvoId, messageList, setMessagesList} = props;
@@ -57,15 +58,15 @@ function MessageSender(props: {convoId: string, setConvoId: (newConvoId: string)
     });
   }
 
-  return <Form.Group as={Row} className="mb-3">
+  return <Form.Group as={Row} className={StyleClassNames.rowStandard}>
     <Col sm="12">
       <Stack direction="vertical" style={{alignItems: "stretch", justifyContent: "center"}} gap={1}>
         <Form.Label>Ask ChatGPT a Question:</Form.Label>
         <Stack>
           <Form.Control as="textarea" rows={2} ref={questionInput} id="chatInput" onChange={handleQuestionChange} disabled={!isEditable} placeholder="" />
           <Stack direction="horizontal">
-            <div className="smallPadding"><Button type="button" id="sendButton" onClick={() => askChatNow()} disabled={!isEditable || !isValidPrompt}><Send /> Send</Button></div>
-            <div className={`smallPadding ms-auto ${!isEditable || !convoId ? 'hidden-item' : ''}`}><Button type="button" id="resetConvoButton" variant='danger' onClick={() => setConvoId("")} disabled={!isEditable || !convoId}><Trash3 /></Button></div>
+            <div className= {StyleClassNames.smallPadding}><Button type="button" id="sendButton" onClick={() => askChatNow()} disabled={!isEditable || !isValidPrompt}><Send /> Send</Button></div>
+            <div className={(!isEditable || !convoId) ? StyleClassNames.hiddenItem : StyleClassNames.sendButtonStylesAll}><Button type="button" id="resetConvoButton" variant='danger' onClick={() => setConvoId("")} disabled={!isEditable || !convoId}><Trash3 /></Button></div>
           </Stack>
         </Stack>
       </Stack>

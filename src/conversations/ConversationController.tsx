@@ -1,6 +1,7 @@
 import { Form, Row } from 'react-bootstrap';
 import { startTransition, useEffect, useState } from 'react';
 import { Msg, getConvoMessages } from '../common';
+import StyleClassNames from '../styling';
 
 const ConversationController = (props: {editable: boolean, setConvoId: (newConvoId: string) => void, messagesList: Msg[], setMessagesList: (msgs: Msg[]) => void, convoId: string}) => {
   const {editable, convoId, setMessagesList, setConvoId, messagesList} = props;
@@ -30,8 +31,8 @@ const ConversationController = (props: {editable: boolean, setConvoId: (newConvo
 
   return (
   <>
-    <Form.Group as={Row} className="mb-2">
-      <Form.Label  column sm="12" style={{paddingLeft: "1rem"}} className="text-secondary">Conversation ID: {convoId}</Form.Label>
+    <Form.Group as={Row} className={StyleClassNames.rowWide}>
+      <Form.Label  column sm="12" style={{paddingLeft: "1rem"}} className={StyleClassNames.textSecondary}>Conversation ID: {convoId}</Form.Label>
     </Form.Group>
   </>
   );

@@ -6,6 +6,7 @@ import { Convo } from '../conversations';
 import { Msg, delay, getAllConversations } from '../common';
 import { RenderOption } from './RenderOptions';
 import ConversationQueryResultsRenderStandard from './ConversationQueryResultsRenderStandard';
+import StyleClassNames from '../styling';
 
 const resolveMessagesAgainstConvos = (currentAllConvos: Convo[] | undefined, currentMsgList: Msg[] | undefined) => {
     //  add current convo, remove stale loaded version
@@ -77,9 +78,9 @@ function ConversationSearch(props: {messageList: Msg[] | undefined, renderOption
     return (
         <>
             <Form>
-                <Row className="mb-3 inset-children">
+                <Row className={StyleClassNames.insetRowStylesAll}>
                     <Col sm="12">
-                        <Row className="mb-3">
+                        <Row className={StyleClassNames.rowStandard}>
                             <Stack direction="vertical" gap={1}>
                                 <Form.Label>Search for a Conversation:</Form.Label>
                                 <Form.Control as="textarea" rows={2} onChange={(e) => updateSearchTerms(e.target.value)}></Form.Control>
@@ -88,11 +89,11 @@ function ConversationSearch(props: {messageList: Msg[] | undefined, renderOption
                     </Col>
                 </Row>
                 
-                <Row className="mb-3">
+                <Row className={StyleClassNames.rowStandard}>
                     <Col sm="12">
                         { 
-                            isLoading ? <h3 className="text-warning">Loading...</h3>
-                            : isLoadingError ? <h3 className="text-danger">Error Loading Conversations</h3>
+                            isLoading ? <h3 className={StyleClassNames.textWarning}>Loading...</h3>
+                            : isLoadingError ? <h3 className={StyleClassNames.textDanger}>Error Loading Conversations</h3>
                             : <>
                                 {isPending ? <h4>useTransition: Rendering Batched...</h4> : null}
                                 <ConversationQueryResultsRenderStandard query={renderOption === 'deferred' ? deferredSearch : searchTerms} allConvos={allConvos} />

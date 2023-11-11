@@ -22,7 +22,7 @@ const ConversationQueryResultsRenderStandard = (props: {allConvos: Convo[] | und
             </Row>
             <Row className="mb-3">
                 <Col sm="12">
-                    <ConversationList conversations={matchConvos} />
+                    <ConversationList conversations={matchConvos} searchText={query} />
                 </Col>                
             </Row>
         </>

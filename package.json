@@ -48,5 +48,9 @@
     "whitelist": [
       "OPENAI_API"
     ]
+  },
+  "devDependencies": {
+    "@types/react-highlight-words": "^0.16.7",
+    "react-highlight-words": "^0.20.0"
   }
 }

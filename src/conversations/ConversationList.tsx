@@ -3,22 +3,22 @@ import { Fragment } from "react";
 import Conversation from "./Conversation";
 import { Convo } from "../common";
 
-const createConvoElements = (conversations: Convo[] | undefined) => {
+const createConvoElements = (conversations: Convo[] | undefined, searchText: string) => {
     return conversations?.map((convo, index, array) => {
         return convo?.messages?.length > 1 ? 
-            (<Conversation key={index} convoId={convo?.id ?? 'no-id'} messages={convo.messages} opacity={1}></Conversation>) :
+            (<Conversation key={index} convoId={convo?.id ?? 'no-id'} messages={convo.messages} opacity={1} searchText={searchText}></Conversation>) :
             (<Fragment key={index}></Fragment>)
     })
 }
 
-const ConversationList = (props: {conversations: Convo[] | undefined}) =>
+const ConversationList = (props: {conversations: Convo[] | undefined, searchText: string}) =>
 { 
-    const {conversations} = props;
+    const {conversations, searchText} = props;
 
     return (
         <Row>
             <Accordion>
-                {createConvoElements(conversations)}
+                {createConvoElements(conversations, searchText)}
             </Accordion>
         </Row>
     )

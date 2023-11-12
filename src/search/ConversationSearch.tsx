@@ -5,7 +5,7 @@ import { useDeferredValue, useEffect, useState, useTransition } from 'react';
 import { Convo } from '../conversations';
 import { Msg, delay, getAllConversations } from '../common';
 import { RenderOption } from './RenderOptions';
-import ConversationQueryResultsRenderStandard from './ConversationQueryResultsRenderStandard';
+import ConversationQueryResults from './ConversationQueryResults';
 import StyleClassNames from '../styling';
 
 const resolveMessagesAgainstConvos = (currentAllConvos: Convo[] | undefined, currentMsgList: Msg[] | undefined) => {
@@ -96,7 +96,7 @@ function ConversationSearch(props: {messageList: Msg[] | undefined, renderOption
                             : isLoadingError ? <h3 className={StyleClassNames.textDanger}>Error Loading Conversations</h3>
                             : <>
                                 {isPending ? <h4>useTransition: Rendering Batched...</h4> : null}
-                                <ConversationQueryResultsRenderStandard query={renderOption === 'deferred' ? deferredSearch : searchTerms} allConvos={allConvos} />
+                                <ConversationQueryResults query={renderOption === 'deferred' ? deferredSearch : searchTerms} allConvos={allConvos} />
                             </>
                         }
                     </Col>                

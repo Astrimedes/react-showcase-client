@@ -20,6 +20,9 @@ function Conversation(props: {convoId: string, messages: Msg[], opacity: number,
         />
       </p>
     )});
+
+    const characterLimit = 120;
+    const convoTitle = sortedMessages[0].message.length < characterLimit ? sortedMessages[0].message : sortedMessages[0].message.slice(0, characterLimit) + "...";
     
     return (
       <Accordion.Item eventKey={convoId} style={{opacity: opacity}}>
@@ -30,7 +33,7 @@ function Conversation(props: {convoId: string, messages: Msg[], opacity: number,
               highlightClassName={StyleClassNames.highlight}
               searchWords={[searchText]}
               autoEscape={false}
-              textToHighlight={sortedMessages[0].message.slice(0, 120)}
+              textToHighlight={convoTitle}
               />
             </h5></div>
             <div><h6 className={StyleClassNames.textSecondary}>ID: {convoId}</h6></div>

@@ -6,7 +6,7 @@ import { Convo, findConversations } from '../common';
 import { ConversationList } from '../conversations';
 import StyleClassNames from '../styling';
 
-const ConversationQueryResultsRenderStandard = (props: {allConvos: Convo[] | undefined, query: string}) => {
+const ConversationQueryResults = (props: {allConvos: Convo[] | undefined, query: string}) => {
     const {allConvos, query} = props;
     
      const matchConvos = useMemo(() => {
@@ -30,5 +30,5 @@ const ConversationQueryResultsRenderStandard = (props: {allConvos: Convo[] | und
     );
 };
 
-export default ConversationQueryResultsRenderStandard;
+export default ConversationQueryResults;
 

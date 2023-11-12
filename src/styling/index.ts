@@ -23,7 +23,6 @@ const StyleClassNames = {
     sendButtonStylesAll: 'smallPadding ms-auto',
     insetRowStylesAll: 'mb-3 inset-children',
     appTitleStylesAll: 'text-center text-white text-wrap bg-primary'
-
 }
 
 export default StyleClassNames;

@@ -28,15 +28,15 @@ function Conversation(props: {convoId: string, messages: Msg[], opacity: number,
       <Accordion.Item eventKey={convoId} style={{opacity: opacity}}>
         <Accordion.Header>
           <Stack direction='vertical'>
-            <div><h5 className={StyleClassNames.textPrimary}> 
+            <div><h6 className={StyleClassNames.textPrimary}> 
             <Highlighter
               highlightClassName={StyleClassNames.highlight}
               searchWords={[searchText]}
               autoEscape={false}
               textToHighlight={convoTitle}
               />
-            </h5></div>
-            <div><h6 className={StyleClassNames.textSecondary}>ID: {convoId}</h6></div>
+            </h6></div>
+            <div><h6 className={StyleClassNames.smallText}>ID: {convoId}</h6></div>
           </Stack>
         </Accordion.Header>
         <Accordion.Body>{bodyElements}</Accordion.Body>

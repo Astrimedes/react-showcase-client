@@ -1,3 +1,9 @@
+
+
+:root {
+  --primary-color: #2274A5;
+}
+
 .stretch-no-scroll {
   width: 100vw;
 }
@@ -54,15 +60,15 @@
 }
 
 .text-darkblue {
-  color:#2274A5;
+  color:var(--primary-color);
 }
 
 .bg-darkblue {
-  background: #2274A5;
+  background: var(--primary-color);
 }
 
 .form-label {
-  color: #2274A5;
+  color: var(--primary-color);
   font-weight: bold;
 }
 

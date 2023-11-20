@@ -95,7 +95,8 @@ function ConversationSearch(props: {messageList: Msg[] | undefined, renderOption
                             isLoading ? <h3 className={StyleClassNames.textWarning}>Loading...</h3>
                             : isLoadingError ? <h3 className={StyleClassNames.textDanger}>Error Loading Conversations</h3>
                             : <>
-                                {isPending ? <h4>useTransition: Rendering Batched...</h4> : null}
+                                {renderOption === 'transition' && isPending ? <h4 className={StyleClassNames.textDanger}>useTransition: Rendering Batched...</h4> : null}
+                                {renderOption === 'deferred' && searchTerms !== deferredSearch ? <h4 className={StyleClassNames.textDanger} >useDeferredValue: Showing Deferred Results...</h4> : null}
                                 <ConversationQueryResults query={renderOption === 'deferred' ? deferredSearch : searchTerms} allConvos={allConvos} />
                             </>
                         }

@@ -4,8 +4,8 @@ import { Msg, getConvoMessages } from '../common';
 import StyleClassNames from '../styling';
 
 const ConversationController = (props: {editable: boolean, setConvoId: (newConvoId: string) => void, messagesList: Msg[], setMessagesList: (msgs: Msg[]) => void, convoId: string}) => {
-  const {editable, convoId, setMessagesList, setConvoId, messagesList} = props;
-  const [isEditable, setIsEditable] = useState(editable);
+  const {editable, convoId, setMessagesList, messagesList} = props;
+  const [, setIsEditable] = useState(editable);
 
   const updateMessagesWithConvo = (queryConvoId: string) => {
     setIsEditable(false);
@@ -27,7 +27,7 @@ const ConversationController = (props: {editable: boolean, setConvoId: (newConvo
         setMessagesList(new Array<Msg>());
       }
     })
-  }, [convoId]);
+  }, [convoId, messagesList?.length]);
 
   return (
   <>
